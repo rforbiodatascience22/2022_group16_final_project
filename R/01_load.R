@@ -23,5 +23,5 @@ my_data_raw <- read_tsv(file = "data/_raw/nhgh.tsv")
 
 
 # Write data --------------------------------------------------------------
-write_tsv(x = my_data,
-          file = "data/01_nngh.tsv")
+write_tsv(x = my_data_raw, # remember to change this when we have done wrangling
+          file = "data/01_nhgh.tsv")
