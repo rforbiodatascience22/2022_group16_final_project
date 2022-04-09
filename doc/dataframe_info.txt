@@ -1,0 +1,55 @@
+Data frame:nhgh
+6795 observations and 20 variables, maximum # NAs:971    
+
+
+Name			Labels				Units			Levels			Class			Storage			NAs
+seqn			Respondent sequence number							integer			integer			0
+sex										2						integer			0
+age			Age				years						numeric			double			0
+re			Race/Ethnicity						5						integer			0
+income			Family Income						14						integer			320
+tx			On Insulin or Diabetes Meds							integer			integer			0
+dx			Diagnosed with DM or Pre-DM							integer			integer			0
+wt			Weight				kg						numeric			double			0
+ht			Standing Height			cm						numeric			double			0
+bmi			Body Mass Index			kg/m^2						numeric			double			0
+leg			Upper Leg Length		cm						numeric			double			231
+arml			Upper Arm Length		cm						numeric			double			179
+armc			Arm Circumference		cm						numeric			double			188
+waist			Waist Circumference		cm						numeric			double			239
+tri			Triceps Skinfold		mm						numeric			double			481
+sub			Subscapular Skinfold		mm						numeric			double			971
+gh			Glycohemoglobin			%						numeric			double			0
+albumin			Albumin				g/dL						numeric			double			89
+bun			Blood urea nitrogen		mg/dL						integer			integer			89
+SCr			Creatinine			mg/dL						numeric			double			89
+
+
+Category Levels
+
+sex
+male
+female
+
+re
+Mexican American
+Other Hispanic
+Non-Hispanic White
+Non-Hispanic Black
+Other Race Including Multi-Racial
+
+income
+[0,5000)
+[5000,10000)
+[10000,15000)
+[15000,20000)
+[20000,25000)
+[25000,35000)
+[35000,45000)
+[45000,55000)
+[55000,65000)
+[65000,75000)
+> 20000
+< 20000
+[75000,100000)
+>= 100000
