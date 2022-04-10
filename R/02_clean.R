@@ -93,19 +93,24 @@ data <- data %>%
   replace_na(list(income = avg_income))
 
 # Binarization of gender --------------------------------------------------
-data %>% mutate(sex_binarized = case_when(sex == 'female' ~ -1, 
-                                          sex == 'male' ~ 1)) 
+#data %>% mutate(sex_binarized = case_when(sex == 'female' ~ -1, 
+#                                          sex == 'male' ~ 1)) 
 
 
-# Imputation of NAs in variable "leg" -------------------------------------
+# Imputation of other NAs -------------------------------------
+
+# Need to find a way to do correlation between factor (sex, re)
+# and numeric value
 
 # find correlated variables
+#data %>% 
+#  select(age,wt, ht, leg, arml, armc, waist, tri, sub, gh, albumin, bun, SCr) %>% 
+#  filter(leg > 0.5) %>% 
+#  corrr::correlate() 
 
-data %>% 
-  select(age, wt, ht, leg, arml, armc, waist) %>% 
-  filter(leg > 0.5) %>% 
-  correlate() 
+# take top most correlated variables and use these to impute NAs
 
+# Alternatively: Could use a KNN approach
 
 
 # Write data --------------------------------------------------------------
