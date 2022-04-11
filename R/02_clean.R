@@ -93,9 +93,10 @@ data <- data %>%
   replace_na(list(income = avg_income))
 
 # Binarization of gender --------------------------------------------------
-data %>% mutate(sex_binarized = case_when(sex == 'female' ~ -1, 
-                                          sex == 'male' ~ 1)) 
-
+#data %>% mutate(sex_binarized = case_when(sex == 'female' ~ -1, 
+#                                          sex == 'male' ~ 1)) 
+data %>%
+  
 
 # Imputation of other NAs -------------------------------------
 
