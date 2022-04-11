@@ -1,0 +1,5 @@
+tx	dx	Treatment status	Treatment_number
+0	0	Not diagnosed	ND
+0	1	Diagnosed and not treated	DNT
+1	0	Not diagnosed and treated	NDT
+1	1	Diagnosed and treated	DT
