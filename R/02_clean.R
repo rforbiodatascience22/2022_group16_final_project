@@ -92,20 +92,39 @@ avg_income <- data %>%
 data <- data %>% 
   replace_na(list(income = avg_income))
 
-# Binarization of gender --------------------------------------------------
-#data %>% mutate(sex_binarized = case_when(sex == 'female' ~ -1, 
-#                                          sex == 'male' ~ 1)) 
-data %>%
-  
+# Binarization of sex/re --------------------------------------------------
+
+data <- data %>% 
+  mutate(bin = 1) %>% 
+  pivot_wider(names_from = sex,
+              values_from = bin,
+              values_fill = 0)
+
+data <- data %>% 
+  mutate(bin = 1) %>% 
+  pivot_wider(names_from = re,
+              values_from = bin,
+              values_fill = 0)
+
+#data <- data %>% 
+#  mutate(bin = 1) %>% 
+#  pivot_wider(names_from = sex,                             # create a new variable for each factor in the sex variable (male/female)
+#              values_from = bin,                            # gives value from bin (male: 1 when male, NA when not male)
+#              values_fill = list(bin=0),                    # fills the above NA values with 0
+#              values_fn = list(bin=function(x){head(x,1)})) # function returns the first value (head 1) of object x
+                                                             # These two last lines are used when there are duplicate rows in the data - we do not have that, so we dont need it
+#data <- data %>% 
+#  mutate(bin = 1) %>% 
+#  pivot_wider(names_from = re,
+#              values_from = bin,
+#              values_fill = list(bin=0),
+#              values_fn = list(bin=function(x){head(x,1)}))
 
 # Imputation of other NAs -------------------------------------
 
-# Need to find a way to do correlation between factor (sex, re)
-# and numeric value
-
 # find correlated variables
 data %>% 
-  select(age,wt, ht, leg, arml, armc, waist, tri, sub, gh, albumin, bun, SCr) %>% 
+  select(-seqn, -income) %>% 
   filter(leg > 0.5) %>% 
   corrr::correlate() 
 
