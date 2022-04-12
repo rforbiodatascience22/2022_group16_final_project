@@ -1,6 +1,8 @@
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
 library("corrr")
+library("pdist")
+library("broom")
 
 # Define functions --------------------------------------------------------
 source(file = "R/99_project_functions.R")
@@ -124,13 +126,58 @@ data <- data %>%
 
 # find correlated variables
 data %>% 
+  #drop_na() %>% 
   select(-seqn, -income) %>% 
   filter(leg > 0.5) %>% 
   corrr::correlate() 
-
 # take top most correlated variables and use these to impute NAs
+# OR
+# KNN approach (I will not do it with ML as the project FAQ says not to)
+# 1) Normalize data
+data_normalized <- data %>% 
+  select(-seqn) %>% 
+  mutate_all(normalize)
 
-# Alternatively: Could use a KNN approach
+# 2) find rows which contain NAs
+observations <- data %>% 
+  filter_all(any_vars(is.na(.))) %>% 
+  select(seqn) %>% 
+  mutate_at(1, as.character)
+
+
+NA_data <- data_normalized %>% 
+  filter_all(any_vars(is.na(.)))
+  
+
+# 3) Make distance matrix with distances from NA-containing observations to all other observations
+distances <- as_tibble((as.matrix(pdist(NA_data,                 # using pdist package to compute distances between rows of two matrices
+                           data_normalized))))
+
+# Renaming columns
+distances <- distances %>% 
+  rename_all(~data %>% 
+               pull(seqn) %>% 
+               as.character())
+
+# Renaming rows
+distances <- distances %>% 
+  mutate(X = observations$seqn) 
+
+distances <- distances %>% 
+  remove_rownames %>% 
+  column_to_rownames(var = "X")
+
+# Distances between ALL observations
+#distances <- tibble(as.matrix(dist(data_normalized))) # might have to see if there is a pure 'tidyverse' way of doing this
+
+# 4) For each observation with missing values, select k nearest neighbours (tuning of k would be a ML task)
+k = 100
+
+
+
+
+# 5) Substitute NAs in each observation with median/avg (?) value from k nearest neighbours
+
 
 
 # Write data --------------------------------------------------------------

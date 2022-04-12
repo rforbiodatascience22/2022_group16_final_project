@@ -1,7 +1,6 @@
 # Define project functions ------------------------------------------------
-foo <- function(x){
-  return(2*x)
-}
-bar <- function(x){
-  return(x^2)
+
+# Used in 02_clean.R
+normalize<-function(x){
+  (x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
 }
