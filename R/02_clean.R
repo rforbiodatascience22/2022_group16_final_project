@@ -11,6 +11,7 @@ source(file = "R/99_project_functions.R")
 # Load data ---------------------------------------------------------------
 data <- read_tsv(file = "data/01_nhgh.tsv")
 
+
 # Age as int --------------------------------------------------------------
 data <- data %>% 
   mutate(age = round(age, 
@@ -57,9 +58,9 @@ sub_20000 <- data %>%
            income == 7500 | 
            income == 12500 | 
            income == 17500 ) %>% 
-  summarise(n_distinct(seqn)) %>% 
-  mutate(incomeXn = income * `n_distinct(seqn)`) %>% 
-  summarise(sum(incomeXn)/sum(`n_distinct(seqn)`)) %>% 
+  summarise(n = n_distinct(seqn)) %>% 
+  mutate(incomeXn = income * n) %>% 
+  summarise(sum(incomeXn)/sum(n)) %>% 
   pull()
 
 # calculate replacement for >20000 category by same idea
@@ -73,9 +74,9 @@ over_20000 <- data %>%
            income == 70000 |
            income == 87500 |
            income == 100000) %>% 
-  summarise(n_distinct(seqn)) %>% 
-  mutate(incomeXn = income * `n_distinct(seqn)`) %>% 
-  summarise(sum(incomeXn)/sum(`n_distinct(seqn)`)) %>% 
+  summarise(n = n_distinct(seqn)) %>% 
+  mutate(incomeXn = income * n) %>% 
+  summarise(sum(incomeXn)/sum(n)) %>% 
   pull()
 
 # replace >20000 and <20000 categories with estimates
@@ -124,6 +125,11 @@ data <- data %>%
 
 # Imputation of other NAs -------------------------------------
 
+# Drop rows with too many NAs to impute
+data <- data %>% 
+  filter(rowSums(is.na(.)) < 3)
+
+
 # find correlated variables
 data %>% 
   #drop_na() %>% 
@@ -132,26 +138,32 @@ data %>%
   corrr::correlate() 
 # take top most correlated variables and use these to impute NAs
 # OR
+
+
+
+
 # KNN approach (I will not do it with ML as the project FAQ says not to)
-# 1) Normalize data
+#### 1) Normalize data
 data_normalized <- data %>% 
-  select(-seqn) %>% 
+  select(-seqn, 
+         -tx, 
+         -dx) %>% 
   mutate_all(normalize)
 
-# 2) find rows which contain NAs
-observations <- data %>% 
-  filter_all(any_vars(is.na(.))) %>% 
-  select(seqn) %>% 
-  mutate_at(1, as.character)
+#### 2) find rows which contain NAs
+#observations <- data %>% 
+#  filter_all(any_vars(is.na(.))) %>% 
+#  select(seqn) %>% 
+#  mutate_at(1, as.character)
 
 
 NA_data <- data_normalized %>% 
   filter_all(any_vars(is.na(.)))
   
 
-# 3) Make distance matrix with distances from NA-containing observations to all other observations
+#### 3) Make distance matrix with distances from NA-containing observations to all other observations
 distances <- as_tibble((as.matrix(pdist(NA_data,                 # using pdist package to compute distances between rows of two matrices
-                           data_normalized))))
+                                        data_normalized))))
 
 # Renaming columns
 distances <- distances %>% 
@@ -159,26 +171,125 @@ distances <- distances %>%
                pull(seqn) %>% 
                as.character())
 
-# Renaming rows
-distances <- distances %>% 
-  mutate(X = observations$seqn) 
+# Renaming rows (DEPRECATED)
+#distances <- distances %>% 
+#  mutate(X = observations$seqn) 
 
-distances <- distances %>% 
-  remove_rownames %>% 
-  column_to_rownames(var = "X")
+#distances <- distances %>% 
+#  remove_rownames %>% 
+#  column_to_rownames(var = "X")
+
 
 # Distances between ALL observations
 #distances <- tibble(as.matrix(dist(data_normalized))) # might have to see if there is a pure 'tidyverse' way of doing this
 
-# 4) For each observation with missing values, select k nearest neighbours (tuning of k would be a ML task)
-k = 100
+
+
+#### 4) For each observation with missing values, select k nearest neighbours (tuning of k would be a ML task)
+
+#distances %>% 
+ # rowwise() %>% 
+ # map(somefunction)
+
+#distances %>% 
+#  rowwise(X) %>% 
+#  transmute(min = min(c_across(cols = everything())))
+
+#distances %>% 
+#  rowwise() %>% 
+#  transmute(min = min(c_across(where(is.numeric))))
+
+
+knn_val_and_index <- distances %>% 
+  rowwise() %>% 
+  transmute(x = list(knn(c_across(where(is.numeric)), 
+                             k = 5))) %>% 
+  unnest(x)
+
+# 5) Substitute NAs in each observation with avg value from k nearest neighbours
+
+source(file = "R/99_project_functions.R")
+
+seqn_rowid <- data %>% 
+  rowid_to_column() %>% 
+  filter_all(any_vars(is.na(.))) %>% 
+  select(rowid, 
+         seqn)
+
+new <- seqn_rowid %>% 
+  mutate(knn = test %>% 
+           select(6:10)) %>% 
+  unnest(knn)
+
+#data %>% 
+#  mutate(sub = case_when(is.na(sub) ~ ,
+#                         !is.na(sub) ~ sub))
+
+joined <- left_join(data, 
+                    new %>% select(-rowid), 
+                    by="seqn") 
+
+joined <- joined %>% 
+  pivot_longer(cols = c(V6,V7,V8,V9,V10), 
+               names_to = "KNN", 
+               values_to = "Value") %>% 
+  group_by(seqn) %>% 
+  summarize(KNN = list(Value))
+
+joined2 <- left_join(data,
+                     joined,
+                     by = "seqn")
+
+joined2 %>% 
+  slice(joined2 %>% 
+          slice(10) %>% 
+          select(KNN) %>% 
+          unlist(., use.names = FALSE)) %>% 
+  summarise(mean = mean(sub, na.rm = TRUE))
+
+#newtest <- joined %>% 
+#  mutate(KNN = joined %>% 
+#           nest(vector = c(V6,V7,V8,V9,V10)) %>% 
+#           select(vector) %>% 
+#           unlist(., use.names = FALSE) %>% 
+#           matrix(nrow = 5, ncol = 6510) %>% 
+#           t()) %>% 
+#  select(-V6,-V7,-V8,-V9,-V10) %>% 
+#  select(KNN)
+
+# purrr::transpose
+# https://stackoverflow.com/questions/50731645/purrr-extract-rows-of-dataframe-as-vectors
+
+
+
+data %>% 
+  mutate(sub = case_when(is.na(sub) ~ ,
+                         !is.na(sub) ~ sub))
+
+# Problem: Most similar vectors have NAs in sub as well
+#joined %>% 
+#  slice(joined %>% 
+#          slice(.) %>% 
+#          select(KNN)) %>% 
+#  select(sub) %>% 
+#  summarise(mean = mean(sub, na.rm = TRUE))
 
 
 
 
-# 5) Substitute NAs in each observation with median/avg (?) value from k nearest neighbours
+#new %>% 
+#  mutate(sub = mean(data %>% slice()))
 
 
+#observations %>% rowwise() %>% sapply(testfunction)
+#observations  %>% 
+#  tibble::rownames_to_column() %>% 
+#  pivot_longer(-rowname) %>% 
+#  pivot_wider(names_from = rowname, values_from = value) %>% 
+#  lapply(testfunction)
+
+#data %>% 
+#  transmute(x = if_else(is.na(sub), testfunction(55), sub))
 
 # Write data --------------------------------------------------------------
 write_tsv(x = data_clean,
