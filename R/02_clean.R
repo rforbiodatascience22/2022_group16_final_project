@@ -151,10 +151,10 @@ data_normalized <- data %>%
   mutate_all(normalize)
 
 #### 2) find rows which contain NAs
-#observations <- data %>% 
-#  filter_all(any_vars(is.na(.))) %>% 
-#  select(seqn) %>% 
-#  mutate_at(1, as.character)
+observations <- data %>% 
+  filter_all(any_vars(is.na(.))) %>% 
+  select(seqn) %>% 
+  mutate_at(1, as.character)
 
 
 NA_data <- data_normalized %>% 
@@ -170,6 +170,9 @@ distances <- distances %>%
   rename_all(~data %>% 
                pull(seqn) %>% 
                as.character())
+
+
+
 
 # Renaming rows (DEPRECATED)
 #distances <- distances %>% 
@@ -199,12 +202,41 @@ distances <- distances %>%
 #  rowwise() %>% 
 #  transmute(min = min(c_across(where(is.numeric))))
 
+############ TEST #############
+#### TRANSPOSING TABLE
+distances_plus <- distances %>% 
+  mutate(seqn = observations %>% 
+           select(seqn) %>% 
+           unlist(., use.names = FALSE)) %>% 
+  relocate(seqn)
 
+distances_transposed <- distances_plus %>% 
+  pivot_longer(cols =-1) %>% 
+  pivot_wider(names_from = seqn, values_from = value) %>% 
+  select(-name)
+####
+
+k = 5
+distances_transposed %>% 
+  map_df(sort) %>% 
+  slice(2:(k+1))
+
+
+# Problem: Knowing which indeces each sorted distance comes from.
+# Solution: Turning each value into a list of two; the distance and the seqn and then sorting them by the distance
+
+############ TEST OVER #############
+
+#
 knn_val_and_index <- distances %>% 
   rowwise() %>% 
   transmute(x = list(knn(c_across(where(is.numeric)), 
                              k = 5))) %>% 
   unnest(x)
+
+
+
+
 
 # 5) Substitute NAs in each observation with avg value from k nearest neighbours
 
@@ -217,13 +249,10 @@ seqn_rowid <- data %>%
          seqn)
 
 new <- seqn_rowid %>% 
-  mutate(knn = test %>% 
+  mutate(knn = knn_val_and_index %>% 
            select(6:10)) %>% 
   unnest(knn)
 
-#data %>% 
-#  mutate(sub = case_when(is.na(sub) ~ ,
-#                         !is.na(sub) ~ sub))
 
 joined <- left_join(data, 
                     new %>% select(-rowid), 
@@ -236,10 +265,12 @@ joined <- joined %>%
   group_by(seqn) %>% 
   summarize(KNN = list(Value))
 
+
 joined2 <- left_join(data,
                      joined,
                      by = "seqn")
 
+# How to get mean of the KNN
 joined2 %>% 
   slice(joined2 %>% 
           slice(10) %>% 
@@ -247,32 +278,16 @@ joined2 %>%
           unlist(., use.names = FALSE)) %>% 
   summarise(mean = mean(sub, na.rm = TRUE))
 
-#newtest <- joined %>% 
-#  mutate(KNN = joined %>% 
-#           nest(vector = c(V6,V7,V8,V9,V10)) %>% 
-#           select(vector) %>% 
-#           unlist(., use.names = FALSE) %>% 
-#           matrix(nrow = 5, ncol = 6510) %>% 
-#           t()) %>% 
-#  select(-V6,-V7,-V8,-V9,-V10) %>% 
-#  select(KNN)
-
-# purrr::transpose
-# https://stackoverflow.com/questions/50731645/purrr-extract-rows-of-dataframe-as-vectors
-
-
-
+# Backbone for doing NA value replacement
 data %>% 
   mutate(sub = case_when(is.na(sub) ~ ,
                          !is.na(sub) ~ sub))
 
+
 # Problem: Most similar vectors have NAs in sub as well
-#joined %>% 
-#  slice(joined %>% 
-#          slice(.) %>% 
-#          select(KNN)) %>% 
-#  select(sub) %>% 
-#  summarise(mean = mean(sub, na.rm = TRUE))
+
+
+
 
 
 

@@ -10,5 +10,3 @@ knn<-function(x, k){
   as_tibble(t(c(sorted_x$x[2:(k+1)], 
                 sorted_x$ix[2:(k+1)])))
 }
-
-
