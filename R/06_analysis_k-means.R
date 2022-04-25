@@ -51,8 +51,6 @@ KMC_plot <- function(y_variable) {
     facet_wrap(~variable)
  p1
  return(p1)
-  
-  #Save to pdf...
 }
 
 
