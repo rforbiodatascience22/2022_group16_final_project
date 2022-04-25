@@ -19,12 +19,8 @@ clean_data_joined <- full_join(my_data_clean,
                              treatment_data,
                              by = c("tx", "dx"))
 
-my_data_clean_aug <- clean_data_joined # %>% ...
-
-
-
 # Mutate data for PCA visualization
-clean_data_pca <- clean_data_joined %>% 
+clean_data_aug_2k <- clean_data_joined %>% 
   mutate(`BMI category` = case_when(
     bmi < 18.5 ~ "Underweight",
     bmi >= 18.5 & bmi < 25 ~ "Normal weight",
@@ -32,11 +28,40 @@ clean_data_pca <- clean_data_joined %>%
     bmi >= 30 ~ "Obese"
   ))
 
-# Write data --------------------------------------------------------------
-#The overall dataset used as reference
-write_tsv(x = my_data_clean_aug,
-          file = "data/03_nhgh_clean_aug.tsv")
 
-#Dataset used for PCA
-write_tsv(x = clean_data_pca,
-          file = "data/03_nhgh_clean_aug_PCA.tsv")
+# Mutate data to not include one out of k-coding
+# on race
+clean_data_aug_1k <- clean_data_aug_2k %>% 
+  pivot_longer(c(starts_with("Non-"), 
+                 starts_with("Other"),
+                 starts_with("Mexican")),
+               names_to = "re",
+               values_to = "re_val") %>% 
+  filter(re_val == 1) %>% 
+  select(-re_val)
+
+
+# Mutate data to not include one out of k-coding
+# on gender
+clean_data_aug <- clean_data_aug_1k %>% 
+  pivot_longer(c("male", "female"),
+               names_to = "gender",
+               values_to = "gender_val") %>% 
+  filter(gender_val == 1) %>% 
+  select(-gender_val)
+
+
+# Write data --------------------------------------------------------------
+#The overall dataset with 1-out-of-k-coding 
+#for both race and gender
+write_tsv(x = clean_data_aug_2k,
+          file = "data/03_nhgh_clean_aug_2k.tsv")
+
+#The overall dataset with 1-out-of-k-coding 
+#for gender
+write_tsv(x = clean_data_aug_1k,
+          file = "data/03_nhgh_clean_aug_1k.tsv")
+
+#The overall dataset without 1-out-of-k-coding
+write_tsv(x = clean_data_aug,
+          file = "data/03_nhgh_clean_aug.tsv")
