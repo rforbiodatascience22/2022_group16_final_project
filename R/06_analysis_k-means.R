@@ -17,14 +17,14 @@ normalize<-function(x){
 #all_data <- read_tsv(file = "data/01_nhgh.tsv")
 clean_data <- read_tsv(file = "data/02_nhgh_clean.tsv")
 
-
-
 my_test_data <-  select_if(clean_data, is.numeric) %>% select(-seqn) 
-
-my_test_data <- my_test_data %>% select(-seqn)
 
 my_test_data <- my_test_data %>%
   mutate_all(normalize)
+
+cor_mat <- round(cor(clean_data),2)
+
+
 
 
 # Model data-----------------------------------------------------
@@ -32,23 +32,24 @@ my_test_data <- my_test_data %>%
 # Model data one k clusters------------------------------------------
 
 # Make 3 clusters
-kclust = kmeans(my_test_data, 3)
+kclust = kmeans(my_test_data, centers = 4)
 summary(kclust)
 kclust
 
 
-augmented = augment(kclust, my_test_data)
+augmented = augment(kclust, my_test_data) #Model object and dataset, assign the cluster to each obs in the original df
 
-#Functions for plottingt the data
+#Function for clustering plot of the data
 KMC_plot <- function(y_variable) {
   
-  augmented.gathered <- augmented %>%
+  augmented_gathered <- augmented %>%
     gather(key = "variable", value = "value",
-           -y_variable, -.cluster)
+           -y_variable, -.cluster)   #key and value is names of the columns, y_variable is kept as a column, and the same for clusters. (from wide to long)
   
- p1 <- ggplot(augmented.gathered, aes_string(x = "value", y = y_variable)) +
+ p1 <- ggplot(augmented_gathered, aes_string(x = "value", y = y_variable)) +
     geom_point(aes(color = .cluster), alpha = 0.8) +
     facet_wrap(~variable)
+ p1
  return(p1)
   
   #Save to pdf...
@@ -65,6 +66,7 @@ for(i in colnames(my_test_data)){
 
 
 age_pl = KMC_plot("age") # No clusters
+age_pl
 KMC_plot("income") #
 KMC_plot("tx")    #Nothing for factor
 KMC_plot("dx")    #Nothing for factor
@@ -90,7 +92,7 @@ KMC_plot("SCr")
 # totss, tot.withinss, betweens, iter   Information about the full clustering
 
 augment(kclust, my_test_data) # point classification
-tidy(kclust) #dummarizes per-cluster level
+tidy(kclust) #summarizes per-cluster level
 glance(kclust) #summarize in a single row
 
 
