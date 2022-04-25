@@ -11,25 +11,13 @@ library("patchwork")
 source(file = "R/99_project_functions.R")
 
 # Load data
-data <- read_tsv(file = "data/03_nhgh_clean_aug.tsv")
+data <- read_tsv(file = "data/03_nhgh_clean_aug_PCA.tsv")
 
 # Count number of observations in each "Treatment status" category
 data %>% count(`Treatment status`)
 
 # For data visualization purposes, arrange data
 data <- data %>% arrange(Treatment_number)
-
-#######THIS PIECE BELONGS TO 03_augment.r###############
-
-data <- data %>% 
-  mutate(`BMI category` = case_when(
-    bmi < 18.5 ~ "Underweight",
-    bmi >= 18.5 & bmi < 25 ~ "Normal weight",
-    bmi >= 25 & bmi < 30 ~ "Overweight",
-    bmi >= 30 ~ "Obese"
-  ))
-
-########################################################
 
 
 #######THIS PIECE BELONGS TO 99_project_functions.r###############
