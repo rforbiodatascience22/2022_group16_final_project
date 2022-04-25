@@ -11,7 +11,7 @@ library("patchwork")
 source(file = "R/99_project_functions.R")
 
 # Load data
-data <- read_tsv(file = "data/03_nhgh_clean_aug_PCA.tsv")
+data <- read_tsv(file = "data/03_nhgh_clean_aug_1k.tsv")
 
 # Count number of observations in each "Treatment status" category
 data %>% count(`Treatment status`)
@@ -20,43 +20,6 @@ data %>% count(`Treatment status`)
 data <- data %>% arrange(Treatment_number)
 
 
-#######THIS PIECE BELONGS TO 99_project_functions.r###############
-#Make labels for axis, when presenting in PC directions
-label_PCs <- function(pca_eigen_matrix, PC_number){
-  PC1_var = round(pca_matrix_eigen$percent[PC_number]*100, 2)
-  
-  PC_label = str_c(cbind("Principal Component ", 
-                         PC_number, 
-                         " (", 
-                         PC1_var, 
-                         " %)"), 
-                   collapse = "")
-  return(PC_label)
-}
-
-
-##Find highest and lowest values in PC1 and PC2 of 
-#rotation matrix for plot window design
-rot_plot_axes <- function(rotation_matrix){
-  x_max = max(rotation_matrix$PC1)+0.1
-  x_min = min(rotation_matrix$PC1)-0.1
-  y_max = max(rotation_matrix$PC2)+0.1
-  y_min = min(rotation_matrix$PC2)-0.1
-  axes_boundaries <- c(x_min, x_max, y_min, y_max)
-  
-  return(axes_boundaries)
-}
-
-
-select_data_subset <- function(data, exclude){
-  pca_prep_data <- data %>% 
-    select(where(is.numeric) &  #only keep numeric data
-             !all_of(exclude))
-  
-  return(pca_prep_data)
-}
-
-########################################################
 ###Do PCA to predict/cluster diabetes status
 
 #Clean dataset for pca; remove 
@@ -98,12 +61,12 @@ ggplot(data = pca_matrix_eigen,
 
 
 #Extract variance explained by PC1 and PC2
-PC1_label = label_PCs(pca_eigen_matrix = pca_eigen_matrix, PC_number = 1)
-PC2_label = label_PCs(pca_eigen_matrix = pca_eigen_matrix, PC_number = 2)
+PC1_label <- label_PCs(pca_eigen_matrix = pca_eigen_matrix, PC_number = 1)
+PC2_label <- label_PCs(pca_eigen_matrix = pca_eigen_matrix, PC_number = 2)
 
 # Plot visualization in the PC1,PC2-plane
 # Color coordinates based on Treatment Status
-pca_plot = ggplot(data = data_merge_pca,
+pca_plot <- ggplot(data = data_merge_pca,
        mapping = aes(x = .fittedPC1, 
                      y = .fittedPC2, 
                      color = `Treatment status`)) + 
@@ -171,8 +134,9 @@ pca_prep_data = select_data_subset(
     "dx",
     "tx", 
     "Treatment_number",
-    !"leg",
-    !"arml"))
+    "leg",
+    "arml",
+    "bmi"))
 
 #Count number of variables that PCA is based on
 vars = dim(pca_prep_data)[2]
