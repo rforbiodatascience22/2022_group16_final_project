@@ -1,8 +1,8 @@
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
-library("corrr")
 library("pdist")
 library("broom")
+library("pdist")
 
 # Define functions --------------------------------------------------------
 source(file = "R/99_project_functions.R")
@@ -109,203 +109,120 @@ data <- data %>%
               values_from = bin,
               values_fill = 0)
 
-#data <- data %>% 
-#  mutate(bin = 1) %>% 
-#  pivot_wider(names_from = sex,                             # create a new variable for each factor in the sex variable (male/female)
-#              values_from = bin,                            # gives value from bin (male: 1 when male, NA when not male)
-#              values_fill = list(bin=0),                    # fills the above NA values with 0
-#              values_fn = list(bin=function(x){head(x,1)})) # function returns the first value (head 1) of object x
-                                                             # These two last lines are used when there are duplicate rows in the data - we do not have that, so we dont need it
-#data <- data %>% 
-#  mutate(bin = 1) %>% 
-#  pivot_wider(names_from = re,
-#              values_from = bin,
-#              values_fill = list(bin=0),
-#              values_fn = list(bin=function(x){head(x,1)}))
-
 # Imputation of other NAs -------------------------------------
+
 
 # Drop rows with too many NAs to impute
 data <- data %>% 
   filter(rowSums(is.na(.)) < 3)
 
-
-# find correlated variables
-data %>% 
-  #drop_na() %>% 
-  select(-seqn, -income) %>% 
-  filter(leg > 0.5) %>% 
-  corrr::correlate() 
-# take top most correlated variables and use these to impute NAs
-# OR
+# columns which contain NAs:
+cols_with_NA <- data %>% 
+  select_if(function(x) any(is.na(x))) %>% 
+  colnames()
 
 
-
-
-# KNN approach (I will not do it with ML as the project FAQ says not to)
-#### 1) Normalize data
+# normalize data
 data_normalized <- data %>% 
   select(-seqn, 
          -tx, 
          -dx) %>% 
   mutate_all(normalize)
 
-#### 2) find rows which contain NAs
-observations <- data %>% 
+
+# Get only rows which contain NA (we dont need distances for those that do not contain NA)
+data_rows_containing_na <- data_normalized %>% filter_all(any_vars(is.na(.)))
+
+
+# We only want to get KNNs which have a value for the variable we are trying to impute,
+# so we filter out those that do not have a value for those
+data_rows_where_leg_is_not_na <- data_normalized %>% filter(!is.na(leg))
+data_rows_where_arml_is_not_na <- data_normalized %>% filter(!is.na(arml))
+data_rows_where_armc_is_not_na <- data_normalized %>% filter(!is.na(armc))
+data_rows_where_waist_is_not_na <- data_normalized %>% filter(!is.na(waist))
+data_rows_where_tri_is_not_na <- data_normalized %>% filter(!is.na(tri))
+data_rows_where_sub_is_not_na <- data_normalized %>% filter(!is.na(sub))
+
+
+# Calculate KNN for each observation which has NA in a given variable
+armc_knn <- knn(data_rows_containing_na, 
+                data_rows_where_armc_is_not_na, 
+                var = "armc",
+                k=5)
+arml_knn <- knn(data_rows_containing_na, 
+                data_rows_where_arml_is_not_na, 
+                var = "arml",
+                k=5)
+leg_knn <- knn(data_rows_containing_na, 
+               data_rows_where_leg_is_not_na, 
+               var = "leg",
+               k=5)
+sub_knn <- knn(data_rows_containing_na, 
+               data_rows_where_sub_is_not_na, 
+               var = "sub",
+               k=5)
+tri_knn <- knn(data_rows_containing_na, 
+               data_rows_where_tri_is_not_na, 
+               var = "tri",
+               k=5)
+waist_knn <- knn(data_rows_containing_na, 
+                 data_rows_where_waist_is_not_na, 
+                 var = "waist",
+                 k=5)
+
+
+# Get the seqn number of observations which contain any number of NAs
+seqns_with_NAs <- data %>% 
   filter_all(any_vars(is.na(.))) %>% 
   select(seqn) %>% 
-  mutate_at(1, as.character)
+  pull
 
 
-NA_data <- data_normalized %>% 
-  filter_all(any_vars(is.na(.)))
-  
+# In the original data, when a row contains NAs in a given variable replace it with the mean value of that variable
+# from the KNN
+data <- data %>% 
+  rowwise %>% 
+  mutate(armc = case_when(seqn %in% seqns_with_NAs ~ indexing_function(cur_data(),
+                                                                       armc_knn, 
+                                                                       "armc"),
+                          !seqn %in% seqns_with_NAs ~ armc))
 
-#### 3) Make distance matrix with distances from NA-containing observations to all other observations
-distances <- as_tibble((as.matrix(pdist(NA_data,                 # using pdist package to compute distances between rows of two matrices
-                                        data_normalized))))
+data <- data %>% 
+  rowwise %>% 
+  mutate(arml = case_when(seqn %in% seqns_with_NAs ~ indexing_function(cur_data(),
+                                                                       arml_knn, 
+                                                                       "arml"),
+                          !seqn %in% seqns_with_NAs ~ arml))
 
-# Renaming columns
-distances <- distances %>% 
-  rename_all(~data %>% 
-               pull(seqn) %>% 
-               as.character())
+data <- data %>% 
+  rowwise %>% 
+  mutate(leg = case_when(seqn %in% seqns_with_NAs ~ indexing_function(cur_data(),
+                                                                      leg_knn, 
+                                                                       "leg"),
+                          !seqn %in% seqns_with_NAs ~ leg))
 
+data <- data %>% 
+  rowwise %>% 
+  mutate(sub = case_when(seqn %in% seqns_with_NAs ~ indexing_function(cur_data(),
+                                                                      sub_knn, 
+                                                                       "sub"),
+                          !seqn %in% seqns_with_NAs ~ sub))
 
+data <- data %>% 
+  rowwise %>% 
+  mutate(tri = case_when(seqn %in% seqns_with_NAs ~ indexing_function(cur_data(),
+                                                                      tri_knn, 
+                                                                       "tri"),
+                          !seqn %in% seqns_with_NAs ~ tri))
 
+data <- data %>% 
+  rowwise %>% 
+  mutate(waist = case_when(seqn %in% seqns_with_NAs ~ indexing_function(cur_data(),
+                                                                        waist_knn, 
+                                                                       "waist"),
+                          !seqn %in% seqns_with_NAs ~ waist))
 
-# Renaming rows (DEPRECATED)
-#distances <- distances %>% 
-#  mutate(X = observations$seqn) 
-
-#distances <- distances %>% 
-#  remove_rownames %>% 
-#  column_to_rownames(var = "X")
-
-
-# Distances between ALL observations
-#distances <- tibble(as.matrix(dist(data_normalized))) # might have to see if there is a pure 'tidyverse' way of doing this
-
-
-
-#### 4) For each observation with missing values, select k nearest neighbours (tuning of k would be a ML task)
-
-#distances %>% 
- # rowwise() %>% 
- # map(somefunction)
-
-#distances %>% 
-#  rowwise(X) %>% 
-#  transmute(min = min(c_across(cols = everything())))
-
-#distances %>% 
-#  rowwise() %>% 
-#  transmute(min = min(c_across(where(is.numeric))))
-
-############ TEST #############
-#### TRANSPOSING TABLE
-distances_plus <- distances %>% 
-  mutate(seqn = observations %>% 
-           select(seqn) %>% 
-           unlist(., use.names = FALSE)) %>% 
-  relocate(seqn)
-
-distances_transposed <- distances_plus %>% 
-  pivot_longer(cols =-1) %>% 
-  pivot_wider(names_from = seqn, values_from = value) %>% 
-  select(-name)
-####
-
-k = 5
-distances_transposed %>% 
-  map_df(sort) %>% 
-  slice(2:(k+1))
-
-
-# Problem: Knowing which indeces each sorted distance comes from.
-# Solution: Turning each value into a list of two; the distance and the seqn and then sorting them by the distance
-
-############ TEST OVER #############
-
-#
-knn_val_and_index <- distances %>% 
-  rowwise() %>% 
-  transmute(x = list(knn(c_across(where(is.numeric)), 
-                             k = 5))) %>% 
-  unnest(x)
-
-
-
-
-
-# 5) Substitute NAs in each observation with avg value from k nearest neighbours
-
-source(file = "R/99_project_functions.R")
-
-seqn_rowid <- data %>% 
-  rowid_to_column() %>% 
-  filter_all(any_vars(is.na(.))) %>% 
-  select(rowid, 
-         seqn)
-
-new <- seqn_rowid %>% 
-  mutate(knn = knn_val_and_index %>% 
-           select(6:10)) %>% 
-  unnest(knn)
-
-
-joined <- left_join(data, 
-                    new %>% select(-rowid), 
-                    by="seqn") 
-
-joined <- joined %>% 
-  pivot_longer(cols = c(V6,V7,V8,V9,V10), 
-               names_to = "KNN", 
-               values_to = "Value") %>% 
-  group_by(seqn) %>% 
-  summarize(KNN = list(Value))
-
-
-joined2 <- left_join(data,
-                     joined,
-                     by = "seqn")
-
-# How to get mean of the KNN
-joined2 %>% 
-  slice(joined2 %>% 
-          slice(10) %>% 
-          select(KNN) %>% 
-          unlist(., use.names = FALSE)) %>% 
-  summarise(mean = mean(sub, na.rm = TRUE))
-
-# Backbone for doing NA value replacement
-data %>% 
-  mutate(sub = case_when(is.na(sub) ~ ,
-                         !is.na(sub) ~ sub))
-
-
-# Problem: Most similar vectors have NAs in sub as well
-
-
-
-
-
-
-
-#new %>% 
-#  mutate(sub = mean(data %>% slice()))
-
-
-#observations %>% rowwise() %>% sapply(testfunction)
-#observations  %>% 
-#  tibble::rownames_to_column() %>% 
-#  pivot_longer(-rowname) %>% 
-#  pivot_wider(names_from = rowname, values_from = value) %>% 
-#  lapply(testfunction)
-
-#data %>% 
-#  transmute(x = if_else(is.na(sub), testfunction(55), sub))
 
 # Write data --------------------------------------------------------------
-write_tsv(x = data_clean,
+write_tsv(x = data,
           file = "data/02_nhgh_clean.tsv")
