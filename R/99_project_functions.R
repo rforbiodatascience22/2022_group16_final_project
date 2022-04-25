@@ -59,3 +59,19 @@ indexing_function <- function(x, y, var){
     summarise(mean = mean(.data[[var]])) %>% 
     pull
 }
+
+
+
+#K-means clustering plot
+KMC_plot <- function(y_variable) {
+  
+  augmented_gathered <- augmented %>%
+    gather(key = "variable", value = "value",
+           -y_variable, -.cluster)   #key and value is names of the columns, y_variable is kept as a column, and the same for clusters. (from wide to long)
+  
+  p1 <- ggplot(augmented_gathered, aes_string(x = "value", y = y_variable)) +
+    geom_point(aes(color = .cluster), alpha = 0.8) +
+    facet_wrap(~variable)
+  p1
+  return(p1)
+}
