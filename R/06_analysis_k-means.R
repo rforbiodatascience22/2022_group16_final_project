@@ -15,11 +15,11 @@ normalize<-function(x){
 }
 # Load data ---------------------------------------------------------------
 #all_data <- read_tsv(file = "data/01_nhgh.tsv")
-my_data_clean_aug <- read_tsv(file = "data/02_nhgh_clean.tsv")
+clean_data <- read_tsv(file = "data/02_nhgh_clean.tsv")
 
 
 
-my_test_data <-  select_if(my_data_clean_aug, is.numeric)
+my_test_data <-  select_if(clean_data, is.numeric) %>% select(-seqn) 
 
 my_test_data <- my_test_data %>% select(-seqn)
 
