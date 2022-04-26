@@ -17,12 +17,28 @@ normalize<-function(x){
 #all_data <- read_tsv(file = "data/01_nhgh.tsv")
 clean_data <- read_tsv(file = "data/02_nhgh_clean.tsv")
 
-my_test_data <-  select_if(clean_data, is.numeric) %>% select(-seqn) 
+my_test_data <- read_tsv(file = "data/03_nhgh_clean_aug_2k.tsv")
+
+my_test_data <-  select_if(my_test_data, is.numeric) %>% select(-seqn) 
 
 my_test_data <- my_test_data %>%
   mutate_all(normalize)
 
+
+##Correlation matrix
+library(reshape2)
 cor_mat <- round(cor(clean_data),2)
+melted_cormat <- melt(cor_mat)
+ggplot(data = melted_cormat, aes(x=Var1, y=Var2, fill=value)) + 
+  geom_tile() +
+  theme(axis.text.x = element_text(angle = 45))
+
+correlation_data <- cor_mat %>%
+  gather(key = "variable", value = "value",
+         -y_variable, -.cluster)   #key and value is names of the columns, y_variable is kept as a column, and the same for clusters. (from wide to long)
+
+
+
 
 
 
@@ -45,6 +61,11 @@ KMC_plot <- function(y_variable) {
   augmented_gathered <- augmented %>%
     gather(key = "variable", value = "value",
            -y_variable, -.cluster)   #key and value is names of the columns, y_variable is kept as a column, and the same for clusters. (from wide to long)
+  
+  #augmented %>%
+   # pivot_longer(key = "variable", value = "value",
+    #       -y_variable, -.cluster)
+  
   
  p1 <- ggplot(augmented_gathered, aes_string(x = "value", y = y_variable)) +
     geom_point(aes(color = .cluster), alpha = 0.8) +
