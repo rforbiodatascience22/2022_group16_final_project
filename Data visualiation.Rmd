@@ -1,0 +1,345 @@
+---
+title: "Data visualisation"
+output: html_document
+date: '2022-05-01'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Packages 
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(gridExtra)
+library(patchwork)
+library(scales)
+library(ggridges)
+```
+
+
+## Income by ethnicity
+## The boxplot compactly displays the distribution of a continuous variable. It visualises five summary statistics (the median, two hinges and two whiskers), and all "outlying" points individually.
+## The lower and upper hinges correspond to the first and third quartiles (the 25th and 75th percentiles)
+## The upper whisker extends from the hinge to the largest value no further than 1.5 * IQR from the hinge (where IQR is the inter-quartile range, or distance between the first and third quartiles). The lower whisker extends from the hinge to the smallest value at most 1.5 * IQR of the hinge. Data beyond the end of the whiskers are called "outlying" points and are plotted individually.
+
+## Geom_violin describes the distribution of the data for each group
+
+```{r}
+normalize <-function(x){
+  (x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
+}
+```
+
+
+```{r}
+data %>% 
+  #mutate(income_nor = normalize(data$income)) %>% 
+  ggplot(aes(x = re, 
+             y = income)) + 
+  geom_boxplot(outlier.color = "red", 
+               outlier.shape = 1, 
+               outlier.size = 2) + 
+  geom_violin(alpha = 1/10, 
+              color = "grey") +  
+  theme(panel.grid.major = element_blank(),
+        axis.text.x = element_text(angle = 20, size = 7)) + 
+  labs(x = " ", 
+       y = "Annual income", 
+       title = "Annual income by ethnicity", 
+       caption = "red dot = outlier", size = 2)
+```
+
+## Total diagnosed indviduals
+```{r}
+dx_total <- data %>% 
+  filter(dx == 1) %>% 
+  select(-seqn)
+```
+
+## Premenopausal aged women and men with equivalent age
+count(data,sex)
+
+```{r}
+dx_below50 <- data %>% 
+  filter(age <50) %>% 
+  filter(dx == 1)
+```
+
+
+# 625 diagnosed DM or pre-DM
+
+```{r}
+p1 <- dx_below50 %>% 
+  ggplot(aes(x = sex)) + 
+  geom_bar(aes(y = 100*(..count..)/dx_total %>% nrow())) + 
+  ylim(0,40) + 
+  theme_classic() +  
+  labs(x = "", 
+       y = "Percentage of total diagnosed individuals", 
+       subtitle = "Age group below 50", 
+       caption = "The average age for menopause in USA is 50")
+```
+
+
+### Menopausal aged women and men with equivalent age
+
+
+```{r}
+dx_above50 <- data %>% 
+  filter(age >50) %>% 
+  filter(dx == 1)
+```
+
+```{r}
+p2 <- dx_above50 %>% 
+  ggplot(aes(x = sex)) + 
+  geom_bar(aes(y = 100*(..count..)/dx_total %>% nrow())) + 
+  scale_y_continuous(breaks = seq(0,40,10)) + 
+  theme_classic() + 
+  labs(x = "", 
+       y = " ", 
+       subtitle = "Age group above 50")
+```
+
+```{r}
+(p1 + p2) + 
+  plot_annotation(title = "Pre- and postmenopausal prevalence of diabetes mellitus")
+```
+  
+
+
+## Income, ethnicity, tx 
+
+```{r}
+dx_total %>% 
+  mutate(tx_class = case_when(tx == 0 ~ "Not treated", 
+                              tx == 1 ~ "Treated")) %>% 
+  ggplot(aes(x = re, 
+             y = income)) + 
+  geom_boxplot() + 
+  facet_wrap(~ tx_class) + 
+  theme(panel.grid.major = element_blank(),
+        axis.text.x = element_text(angle = 25,size = 7)) + 
+  labs(x = " ", 
+       y = "Annual income [USD]", 
+       title = "Annual income and ethnicity in relation to treatment status")
+```
+
+##Linear relations between variables 
+
+```{r}
+data %>% 
+  ggplot(aes(x = bmi, 
+             y = waist)) + 
+  geom_point()
+```
+### BMI and waist is correlated.
+
+
+```{r}
+data %>% 
+  ggplot(aes(x = bmi, 
+             y = sub)) + 
+  geom_point()
+```
+### 	Subscapular Skinfold and BMI is correlated. 
+
+```{r}
+data %>% 
+  ggplot(aes(x = bmi, 
+             y = waist)) + 
+  geom_point()
+```
+### BMI and waist is correlated
+
+
+## Distribution of BMI 
+
+```{r}
+data %>%  
+  count(bmi_class) %>% 
+  drop_na(bmi_class) %>% 
+  mutate(bmi_class = factor(bmi_class,
+                            levels =  c("underweight", "normal weight",
+                                        "overweight", "obese",
+                                        "severe obesity", "morbid obesity",
+                                        "super obese")), 
+         Percentage = n / sum(n) * 100) %>%
+  ggplot(aes(x = bmi_class, 
+             y = Percentage)) +
+  geom_col() + 
+  labs( x = "BMI classification", 
+        title = "Distribution of BMI classification")
+```
+
+## BMI class and age in relation diagnosis 
+
+```{r}
+data %>% 
+  mutate(dx_class = case_when(dx == 0 ~ "Not diagnosed", 
+                              dx == 1 ~ "Diagnosed")) %>% 
+  mutate(bmi_class = factor(bmi_class,
+                            levels =  c("underweight", "normal weight",
+                                        "overweight", "obese",
+                                        "severe obesity", "morbid obesity",
+                                        "super obese"))) %>% 
+  ggplot(aes(x = age, 
+             y = bmi_class, 
+             fill = dx_class)) + 
+  geom_boxplot() + 
+  #facet_wrap(~ dx_class) + 
+  theme(legend.position = "bottom") +
+  scale_fill_discrete(name = " ") + 
+  labs(x = "Age", 
+      y = "BMI class", 
+      title = "BMI class and age in relation to diagnosis")
+```
+
+
+## Ethnicity and age in relation diagnosis 
+
+```{r}
+data %>% 
+  mutate(dx_class = case_when(dx == 0 ~ "Not diagnosed", 
+                              dx == 1 ~ "Diagnosed")) %>% 
+  mutate(bmi_class = factor(bmi_class,
+                            levels =  c("underweight", "normal weight",
+                                        "overweight", "obese",
+                                        "severe obesity", "morbid obesity",
+                                        "super obese"))) %>% 
+  ggplot(aes(x = age, 
+             y = re, 
+             fill = dx_class)) + 
+  geom_boxplot() + 
+  theme(legend.position = "bottom") +
+  scale_fill_discrete(name = " ") + 
+  labs(x = "Age", 
+      y = "Ethnicity", 
+      title = "Ethnicity and age in relation to diagnosis")
+```
+
+
+## Ethnicity and age in relation to treatment status of all diagnosed individual
+
+```{r}
+dx_total %>% 
+  mutate(tx_class = case_when(tx == 0 ~ "Not treated", 
+                              tx == 1 ~ "Treated")) %>% 
+  ggplot(aes(x = age, 
+             y = re, 
+             fill = tx_class)) + 
+  geom_boxplot() + 
+  theme(legend.position = "bottom") +
+  scale_fill_discrete(name = " ") + 
+  labs(x = "Age", 
+      y = "Ethnicity", 
+title = "Ethnicity and age in relation to treatment")
+```
+
+
+## BMI class and annual income in relation diagnosis 
+
+```{r}
+data %>% 
+  mutate(dx_class = case_when(dx == 0 ~ "Not diagnosed", 
+                              dx == 1 ~ "Diagnosed")) %>% 
+    mutate(bmi_class = factor(bmi_class,
+                            levels =  c("underweight", "normal weight",
+                                        "overweight", "obese",
+                                        "severe obesity", "morbid obesity",
+                                        "super obese"))) %>% 
+  ggplot(aes(x = bmi_class, 
+             y = income, 
+             fill = dx_class)) + 
+  geom_boxplot() + 
+  theme(legend.position = "bottom") +
+  scale_fill_discrete(name = " ") + 
+  labs( x = "BMI class",
+        y = "Annual income [USD]", 
+        title = " BMI class and annual income in relation to diagnosis")
+```
+
+
+## Ethnicity and income in relation to diagnosis
+```{r}
+dx1 <- data %>% 
+  mutate(dx_class = case_when(dx == 0 ~ "Not diagnosed", 
+                              dx == 1 ~ "Diagnosed")) %>% 
+  ggplot(aes(x = re, 
+             y = income, 
+             fill = dx_class)) + 
+  geom_boxplot() + 
+  theme(panel.grid.major = element_blank(),
+        axis.text.x = element_text(angle = 25,size = 7), 
+        legend.position = "bottom") + 
+  scale_fill_discrete(name = " ") + 
+  labs(x = " ", 
+       y = "Annual income [USD]",
+       title = "Diagnosis")
+```
+
+## Ethnicity and income in relation to treatment status 
+
+```{r}
+tx1 <- dx_total %>% 
+  mutate(tx_class = case_when(tx == 0 ~ "Not treated", 
+                              tx == 1 ~ "Treated")) %>% 
+  ggplot(aes(x = re, 
+             y = income, 
+             fill = tx_class)) + 
+  geom_boxplot() + 
+  theme(panel.grid.major = element_blank(),
+        axis.text.x = element_text(angle = 25,size = 7), 
+        legend.position = "bottom") + 
+  scale_fill_discrete(name = " ") + 
+  labs(x = " ", 
+       y = " ",
+       title = "Treatment status")
+```
+
+## Ethnicity and income in relation to treatment status and diagnosis 
+
+```{r}
+dx1 + tx1 + 
+  plot_annotation(title = "Ethnicity and income in relation to diagnosis and treatment status ")
+```
+
+
+
+## Body fat percentage 
+
+```{r}
+data <- data %>% 
+  mutate(sex_class = case_when(sex == "female" ~ 0,
+                               sex == "male" ~ 1),
+         bfp = 1.39 * bmi + 0.16 * age - 10.34 * sex_class - 9)
+```
+
+
+#### For simple, one-dimensional distributions: geom_histogram, geom_density or geom_freqpoly
+#### As the number of men and women har similar, mapping the density of each group to y axis is unnecessary. Instead stat(count) is sufficient. 
+
+```{r}
+data %>% 
+  group_by(sex) %>% 
+  summerise()
+```
+
+
+```{r}
+data %>%  
+    mutate(sex_class = case_when(sex == "female" ~ 0,
+                               sex == "male" ~ 1)) %>% 
+  ggplot(aes(x = bfp,
+             y = stat(density),
+             color = sex)) + 
+  geom_freqpoly(binwidth = 2) + 
+  facet_wrap(~ re) +
+  theme(legend.position = "bottom") + 
+  labs(x = " Body fat percentage", 
+       title = "Sex-based distribution of body fat percentage")
+```
+
