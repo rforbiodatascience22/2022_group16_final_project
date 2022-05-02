@@ -24,7 +24,7 @@ knn <- function(x, y, var, k){
     group_by(seqn_w_NA) %>% 
     arrange(value) %>% 
     slice(2:(k+1)) %>% 
-    mutate(dist_rank = 1:5) %>% 
+    mutate(dist_rank = 1:k) %>% 
     select(seqn_w_NA, 
            ID2, 
            dist_rank) %>% 
