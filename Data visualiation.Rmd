@@ -17,6 +17,8 @@ library(gridExtra)
 library(patchwork)
 library(scales)
 library(ggridges)
+library(psych)
+library(corrplot)
 ```
 
 
@@ -155,6 +157,11 @@ data %>%
 ```
 ### BMI and waist is correlated
 
+```{r}
+
+```
+
+
 
 ## Distribution of BMI 
 
@@ -284,7 +291,7 @@ dx1 <- data %>%
 ## Ethnicity and income in relation to treatment status 
 
 ```{r}
-tx1 <- dx_total %>% 
+tx1 <- data %>% 
   mutate(tx_class = case_when(tx == 0 ~ "Not treated", 
                               tx == 1 ~ "Treated")) %>% 
   ggplot(aes(x = re, 
@@ -322,11 +329,6 @@ data <- data %>%
 #### For simple, one-dimensional distributions: geom_histogram, geom_density or geom_freqpoly
 #### As the number of men and women har similar, mapping the density of each group to y axis is unnecessary. Instead stat(count) is sufficient. 
 
-```{r}
-data %>% 
-  group_by(sex) %>% 
-  summerise()
-```
 
 
 ```{r}
@@ -342,4 +344,49 @@ data %>%
   labs(x = " Body fat percentage", 
        title = "Sex-based distribution of body fat percentage")
 ```
+
+```{r}
+data %>% 
+  mutate(income_nor = normalize(data$income)) %>% 
+  ggplot(aes(x = re, 
+             y = income_nor, stat_binline(position = "density"))) + 
+  geom_col() + 
+  #scale_y_continuous(labels = trans_format(format = ))
+  facet_grid(dx ~ tx) + 
+  theme(axis.text.x = element_text(angle = 20,size = 7))
+```
+
+
+## Correlation analysis between multiple variables
+
+### Creating correlation matrix using corr(). 
+#### The default is pearson correlation coefficient which measures the linear dependence between two variables.
+#### Non-numeric variables were deselected. 
+#### use = "complete.obs" handles missing values by case-wise deletion.
+
+```{r}
+corr <- data %>% 
+  select( -c(seqn, sex, sex_class, re, tx, dx, bmi_class)) %>% 
+  cor( use = "complete.obs" )
+```
+
+### Plotting correlations of the above multiple numerix variables using corrplot() function, which creates a graphical display of a correlation matrix, highlighting the most correlated variables in a data table.
+
+#### type = "upper": only shows upper half of the plot. 
+#### order = "hclust": reorder according to the correlation coefficient
+
+```{r}
+corrplot(corr, type = "upper" , order = "hclust", 
+         tl.col = "black", tl.srt = 45, tl.cex = 1)
+```
+
+
+
+```{r}
+  cor(data[, c("bmi", "gh", "albumin", "bun")], use = "complete.obs") %>% 
+  pairs.panels()
+```
+
+
+
 
