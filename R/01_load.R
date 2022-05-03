@@ -9,13 +9,8 @@ source(file = "R/99_project_functions.R")
 # Load main data ---------------------------------------------------------------
 my_data_raw <- read_tsv(file = "data/_raw/nhgh.tsv")
 
-# Wrangle data ------------------------------------------------------------
-
-
-#my_data <- my_data_raw # %>% ...
-
 
 # Write data --------------------------------------------------------------
-write_tsv(x = my_data_raw, # remember to change this when we have done wrangling
+write_tsv(x = my_data_raw, 
           file = "data/01_nhgh.tsv")
 

@@ -17,7 +17,8 @@ treatment_data <- read_tsv(file = "data/_raw/diagnose_and_treatment.tsv")
 # Join data
 clean_data_joined <- full_join(my_data_clean, 
                              treatment_data,
-                             by = c("tx", "dx"))
+                             by = c("tx", 
+                                    "dx"))
 
 # Mutate data for PCA visualization
 clean_data_aug_2k <- clean_data_joined %>% 
@@ -44,7 +45,8 @@ clean_data_aug_1k <- clean_data_aug_2k %>%
 # Mutate data to not include one out of k-coding
 # on gender
 clean_data_aug <- clean_data_aug_1k %>% 
-  pivot_longer(c("male", "female"),
+  pivot_longer(c("male", 
+                 "female"),
                names_to = "gender",
                values_to = "gender_val") %>% 
   filter(gender_val == 1) %>% 
