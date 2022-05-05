@@ -3,7 +3,6 @@ library("tidyverse")
 library("broom")
 library("dplyr")
 library("purrr")
-library("tidyr")
 library("ggplot2")
 
 # Define functions --------------------------------------------------------
@@ -56,6 +55,7 @@ p1 <-
   ggplot(assignments, aes(x = age, y = wt)) +
   geom_point(aes(color = .cluster), alpha = 0.8) + 
   facet_wrap(~ k)
+
 p1
 
 ggplot(clusterings, aes(k, tot.withinss)) +
@@ -69,6 +69,7 @@ ggplot(clusterings, aes(k, tot.withinss)) +
 # Model data with 3 clusters------------------------------------------
 
 # Make 3 clusters
+
 kclust = kmeans(kmeans_data, centers = 3)
 summary(kclust)
 kclust
@@ -96,22 +97,13 @@ KMC_plot("bun")
 KMC_plot("SCr")
 
 
-# Clusters  number of obs information of each point
-# Centers, withinss and size  Information about each cluster
-# totss, tot.withinss, betweens, iter   Information about the full clustering
 
+# Correlation matrix
+#library(ggcorrplot) #ggplot packages
 
-##Correlation matrix
-#library(reshape2)
-#cor_mat <- round(cor(clean_data),2)
-#melted_cormat <- melt(cor_mat)
-#ggplot(data = melted_cormat, aes(x=Var1, y=Var2, fill=value)) + 
-#  geom_tile() +
-# theme(axis.text.x = element_text(angle = 45))
+#cor_matrix <- round(cor(kmeans_data), 1)
+#ggcorrplot(cor_matrix)
 
-#correlation_data <- cor_mat %>%
-# gather(key = "variable", value = "value",
-#       -y_variable, -.cluster)   #key and value is names of the columns, y_variable is kept as a column, and the same for clusters. (from wide to long)
 
 
 
