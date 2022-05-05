@@ -14,13 +14,22 @@ clean_data_joined <- read_tsv(file = "data/02_nhgh_clean.tsv")
 
 
 # Mutate data for PCA visualization
-clean_data_aug_2k <- clean_data_joined %>% 
-  mutate(`BMI category` = case_when(
-    bmi < 18.5 ~ "Underweight",
-    bmi >= 18.5 & bmi < 25 ~ "Normal weight",
-    bmi >= 25 & bmi < 30 ~ "Overweight",
-    bmi >= 30 ~ "Obese"
-  ))
+clean_data_aug_2k <- clean_data_joined %>%
+  mutate(`BMI class` = case_when(bmi < 18.5 ~ "Underweight",
+                                 18.5 <= bmi & bmi < 25.0 ~ "Normal weight",
+                                 25.0 <= bmi & bmi < 30.0 ~ "Overweight",
+                                 30.0 <= bmi & bmi < 35.0 ~ "Obese",
+                                 35.0 <= bmi & bmi < 40.0 ~ "Severe obesity",
+                                 40.0 <= bmi & bmi < 50.0 ~ "Morbid obesity",
+                                 50.0 <= bmi ~ "Super obese"),
+         `BMI class` = factor(`BMI class`, levels = 
+                                c("Underweight",
+                                  "Normal weight",
+                                  "Overweight",
+                                  "Obese",
+                                  "Severe obesity",
+                                  "Morbid obesity",
+                                  "Super obese")))
 
 
 # Mutate data to not include one out of k-coding
