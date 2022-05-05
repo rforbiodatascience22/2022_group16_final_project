@@ -235,7 +235,15 @@ data <- data %>%
                                                "waist"),
                            !seqn %in% seqns_with_NAs ~ waist))
 
+# Load data on diagnostic and treatment
+treatment_data <- read_tsv(file = "data/_raw/diagnose_and_treatment.tsv")
+
+# Join data
+clean_data_joined <- full_join(data, 
+                               treatment_data,
+                               by = c("tx", 
+                                      "dx"))
 
 # Write data --------------------------------------------------------------
-write_tsv(x = data,
+write_tsv(x = clean_data_joined,
           file = "data/02_nhgh_clean.tsv")
