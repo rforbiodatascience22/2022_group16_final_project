@@ -5,19 +5,18 @@ library("stringr")
 library("patchwork")
 
 
-###Spørgsmål: skal vi fjerne det "outlier" 
-###punkt der er på 2. visualisering? (særligt høj SCr)
-
 source(file = "R/99_project_functions.R")
 
 # Load data
 data <- read_tsv(file = "data/03_nhgh_clean_aug_1k.tsv")
 
 # Count number of observations in each "Treatment status" category
+#(used for visualisations)
 data %>% count(`Treatment status`)
 
 # For data visualization purposes, arrange data
-data <- data %>% arrange(Treatment_number)
+data <- data %>% 
+  arrange(Treatment_number)
 
 
 ###Do PCA to predict/cluster diabetes status
@@ -36,10 +35,12 @@ vars = dim(pca_prep_data)[2]
 #The below is created with inspiration from 
 #https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/
 #perform PCA on standardized variables
-pca_ <- pca_prep_data %>% prcomp(scale = TRUE) # do PCA on scaled data
+pca_ <- pca_prep_data %>% 
+  prcomp(scale = TRUE) # do PCA on scaled data
 
 #Load in original dataset to principal components
-data_merge_pca = pca_ %>% augment(data)
+data_merge_pca = pca_ %>% 
+  augment(data)
 
 
 #Show distribution of explained variance by PCs using Skree plot
@@ -61,8 +62,10 @@ ggplot(data = pca_matrix_eigen,
 
 
 #Extract variance explained by PC1 and PC2
-PC1_label <- label_PCs(pca_eigen_matrix = pca_eigen_matrix, PC_number = 1)
-PC2_label <- label_PCs(pca_eigen_matrix = pca_eigen_matrix, PC_number = 2)
+PC1_label <- label_PCs(pca_eigen_matrix = pca_eigen_matrix, 
+                       PC_number = 1)
+PC2_label <- label_PCs(pca_eigen_matrix = pca_eigen_matrix, 
+                       PC_number = 2)
 
 # Plot visualization in the PC1,PC2-plane
 # Color coordinates based on Treatment Status
@@ -77,7 +80,7 @@ pca_plot <- ggplot(data = data_merge_pca,
        subtitle = "Colored based on Treatment status"
        ) + 
   theme(legend.position = "right",
-        text=element_text(size = 11,
+        text = element_text(size = 11,
                           family = "Avenir"))
 
 
@@ -102,32 +105,33 @@ rot_label_axes <- rot_plot_axes(rotation_matrix)
 
 
 rot_plot = ggplot(data = rotation_matrix,
-       mapping = aes(PC1, PC2)) +
+       mapping = aes(PC1, 
+                     PC2)) +
   geom_segment(xend = 0, 
                yend = 0, 
                arrow = arrow_style) +
   geom_text(aes(label = column),
-            hjust = 0, nudge_x = 0, 
+            hjust = 0, 
+            nudge_x = 0, 
             color = "#3F00FF") +
   labs(x = PC1_label,
        y = PC2_label,
        title = "Rotation Matrix") +
-  xlim(rot_label_axes[1], rot_label_axes[2]) + 
-  ylim(rot_label_axes[3], rot_label_axes[4]) +
+  xlim(rot_label_axes[1], 
+       rot_label_axes[2]) + 
+  ylim(rot_label_axes[3], 
+       rot_label_axes[4]) +
   coord_fixed() + # fix aspect ratio to 1:1
-  theme(text=element_text(size = 11,
-                          family = "Avenir"))
+  theme(text = element_text(size = 11,
+                            family = "Avenir"))
 
 #use patchwork library to display plots together
 pca_plot + rot_plot
 
 
-
-
 ##Based on the results of the above analysis, we try to remove leg and arml
 #Clean dataset for pca
 
-##REMOVE WT, HT, SCr!!!
 pca_prep_data = select_data_subset(
   data, 
   c("seqn", 
@@ -141,13 +145,13 @@ pca_prep_data = select_data_subset(
 #Count number of variables that PCA is based on
 vars = dim(pca_prep_data)[2]
 
-#The below is created with inspiration from 
-#https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/
 #perform PCA on standardized variables
-pca_ <- pca_prep_data %>% prcomp(scale = TRUE) # do PCA on scaled data
+pca_ <- pca_prep_data %>% 
+  prcomp(scale = TRUE) # do PCA on scaled data
 
 #Load in original dataset to principal components
-data_merge_pca = pca_ %>% augment(data)
+data_merge_pca = pca_ %>% 
+  augment(data)
 
 
 #Show distribution of explained variance by PCs using Skree plot
@@ -156,8 +160,10 @@ pca_matrix_eigen = pca_ %>%
   tidy(matrix = "eigenvalues")
 
 ggplot(data = pca_matrix_eigen,
-       mapping = aes(PC, percent)) +
-  geom_col(fill = "#3BB6FF", alpha = 0.8) +
+       mapping = aes(PC, 
+                     percent)) +
+  geom_col(fill = "#3BB6FF", 
+           alpha = 0.8) +
   labs(x = "Principal component",
        y = "Variance explained [%]",
        title = "Variance explained within original dataset by each Principal Component") +
@@ -168,8 +174,10 @@ ggplot(data = pca_matrix_eigen,
   )
 
 #Extract variance explained by PC1 and PC2
-PC1_label = label_PCs(pca_eigen_matrix = pca_eigen_matrix, PC_number = 1)
-PC2_label = label_PCs(pca_eigen_matrix = pca_eigen_matrix, PC_number = 2)
+PC1_label = label_PCs(pca_eigen_matrix = pca_eigen_matrix, 
+                      PC_number = 1)
+PC2_label = label_PCs(pca_eigen_matrix = pca_eigen_matrix, 
+                      PC_number = 2)
 
 # Plot visualization in the PC1,PC2-plane
 # Color coordinates based on Treatment Status
@@ -184,8 +192,8 @@ pca_plot = ggplot(data = data_merge_pca,
        subtitle = "Colored based on Treatment status"
   ) + 
   theme(legend.position = "right",
-        text=element_text(size = 11,
-                          family = "Avenir"))
+        text = element_text(size = 11,
+                            family = "Avenir"))
 
 
 #Plot rotation matrix
@@ -207,26 +215,27 @@ arrow_style <- arrow(angle = 20,
                      length = grid::unit(8, "pt"))
 
 rot_plot = ggplot(data = rotation_matrix,
-       mapping = aes(PC1, PC2)) +
+                  mapping = aes(PC1, 
+                                PC2)) +
   geom_segment(xend = 0, 
                yend = 0, 
                arrow = arrow_style) +
   geom_text(aes(label = column),
-            hjust = 0, nudge_x = 0, 
+            hjust = 0, 
+            nudge_x = 0, 
             color = "#3F00FF") +
   labs(x = PC1_label,
        y = PC2_label,
        title = "Rotation Matrix") +
-  xlim(rot_label_axes[1], rot_label_axes[2]) + 
-  ylim(rot_label_axes[3], rot_label_axes[4]) +
+  xlim(rot_label_axes[1], 
+       rot_label_axes[2]) + 
+  ylim(rot_label_axes[3], 
+       rot_label_axes[4]) +
   coord_fixed() + # fix aspect ratio to 1:1
   theme(text=element_text(size = 11,
                           family = "Avenir"))
 
 pca_plot + rot_plot
-
-
-
 
 
 
@@ -249,10 +258,12 @@ vars = dim(pca_prep_data)[2]
 #The below is created with inspiration from 
 #https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/
 #perform PCA on standardized variables
-pca_ <- pca_prep_data %>% prcomp(scale = TRUE) # do PCA on scaled data
+pca_ <- pca_prep_data %>% 
+  prcomp(scale = TRUE) # do PCA on scaled data
 
 #Load in original dataset to principal components
-data_merge_pca = pca_ %>% augment(data)
+data_merge_pca = pca_ %>% 
+  augment(data)
 
 
 #Show distribution of explained variance by PCs using Skree plot
@@ -261,8 +272,10 @@ pca_matrix_eigen = pca_ %>%
   tidy(matrix = "eigenvalues")
 
 ggplot(data = pca_matrix_eigen,
-       mapping = aes(PC, percent)) +
-  geom_col(fill = "#3BB6FF", alpha = 0.8) +
+       mapping = aes(PC, 
+                     percent)) +
+  geom_col(fill = "#3BB6FF", 
+           alpha = 0.8) +
   labs(x = "Principal component",
        y = "Variance explained [%]",
        title = "Variance explained within original dataset by each Principal Component") +
@@ -273,8 +286,10 @@ ggplot(data = pca_matrix_eigen,
   )
 
 #Extract variance explained by PC1 and PC2
-PC1_label = label_PCs(pca_eigen_matrix = pca_eigen_matrix, PC_number = 1)
-PC2_label = label_PCs(pca_eigen_matrix = pca_eigen_matrix, PC_number = 2)
+PC1_label = label_PCs(pca_eigen_matrix = pca_eigen_matrix, 
+                      PC_number = 1)
+PC2_label = label_PCs(pca_eigen_matrix = pca_eigen_matrix, 
+                      PC_number = 2)
 
 # Plot visualization in the PC1,PC2-plane
 # Color coordinates based on Treatment Status
@@ -282,14 +297,16 @@ pca_plot = ggplot(data = data_merge_pca,
        mapping = aes(x = .fittedPC1, 
                      y = .fittedPC2, 
                      color = `BMI category`)) + 
-  geom_point(size = 1.5, alpha = 0.8, shape = 17) +
+  geom_point(size = 1.5, 
+             alpha = 0.8, 
+             shape = 17) +
   labs(x = PC1_label,
        y = PC2_label,
        title = "Visualization of data in Principal Component coordinates",
        subtitle = "Colored based on BMI category"
   ) + 
   theme(legend.position = "right",
-        text=element_text(size = 11,
+        text = element_text(size = 11,
                           family = "Avenir")) 
 
 #Plot rotation matrix
@@ -312,20 +329,24 @@ rot_label_axes <- rot_plot_axes(rotation_matrix)
 
 
 rot_plot = ggplot(data = rotation_matrix,
-       mapping = aes(PC1, PC2)) +
+                  mapping = aes(PC1, 
+                                PC2)) +
   geom_segment(xend = 0, 
                yend = 0, 
                arrow = arrow_style) +
   geom_text(aes(label = column),
-            hjust = 1, nudge_x = -0.02, 
+            hjust = 1, 
+            nudge_x = -0.02, 
             color = "#3F00FF") +
   labs(x = PC1_label,
        y = PC2_label,
        title = "Rotation Matrix") +
-  xlim(rot_label_axes[1], rot_label_axes[2]) + 
-  ylim(rot_label_axes[3], rot_label_axes[4]) +
+  xlim(rot_label_axes[1],
+       rot_label_axes[2]) + 
+  ylim(rot_label_axes[3], 
+       rot_label_axes[4]) +
   coord_fixed() + # fix aspect ratio to 1:1
-  theme(text=element_text(size = 11,
-                          family = "Avenir"))
+  theme(text = element_text(size = 11,
+                            family = "Avenir"))
 
 pca_plot + rot_plot

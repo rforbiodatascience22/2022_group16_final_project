@@ -2,7 +2,6 @@
 library("tidyverse")
 library("pdist")
 library("broom")
-library("pdist")
 
 # Define functions --------------------------------------------------------
 source(file = "R/99_project_functions.R")
@@ -25,7 +24,6 @@ data <- data %>%
             factor)
 
 
-
 # NA treatment ------------------------------------------------------------
 
 ## Setting missing income data to avg of income ---------------------------
@@ -34,20 +32,21 @@ data <- data %>%
 # (>= 100000 category set to 100000 as we have no other
 # way of extrapolating values in this category)
 data <- data %>% 
-  mutate(income = case_when(income == "[25000,35000)" ~ 30000,
-                            income == "[45000,55000)" ~ 50000,
-                            income == "[10000,15000)" ~ 12500,
-                            income == "[35000,45000)" ~ 40000,
-                            income == "[15000,20000)" ~ 17500,
-                            income == "[75000,100000)" ~ 87500,
-                            income == "[5000,10000)" ~ 7500,
-                            income == "[0,5000)" ~ 2500,
-                            income == "[20000,25000)" ~ 22500,
-                            income == ">= 100000" ~ 100000,
-                            income == "[65000,75000)" ~ 70000,
-                            income == "[55000,65000)" ~ 60000,
-                            income == "< 20000" ~ 1, 
-                            income == "> 20000" ~ 2))
+  mutate(income = 
+           case_when(income == "[25000,35000)" ~ 30000,
+                     income == "[45000,55000)" ~ 50000,
+                     income == "[10000,15000)" ~ 12500,
+                     income == "[35000,45000)" ~ 40000,
+                     income == "[15000,20000)" ~ 17500,
+                     income == "[75000,100000)" ~ 87500,
+                     income == "[5000,10000)" ~ 7500,
+                     income == "[0,5000)" ~ 2500,
+                     income == "[20000,25000)" ~ 22500,
+                     income == ">= 100000" ~ 100000,
+                     income == "[65000,75000)" ~ 70000,
+                     income == "[55000,65000)" ~ 60000,
+                     income == "< 20000" ~ 1, 
+                     income == "> 20000" ~ 2))
 
 # calculate replacement for <20000 category by
 # distribution of the 0-5000, 5000-10000, 10000-15000
@@ -81,9 +80,10 @@ over_20000 <- data %>%
 
 # replace >20000 and <20000 categories with estimates
 data <- data %>% 
-  mutate(income = case_when(income == 1 ~ sub_20000,
-                            income == 2 ~ over_20000,
-                            TRUE ~ as.numeric(as.character(income))))
+  mutate(income = 
+           case_when(income == 1 ~ sub_20000,
+                     income == 2 ~ over_20000,
+                     TRUE ~ as.numeric(as.character(income))))
 
 # calculate avg income (without NA observations)
 avg_income <- data %>%
@@ -131,17 +131,24 @@ data_normalized <- data %>%
 
 
 # Get only rows which contain NA (we dont need distances for those that do not contain NA)
-data_rows_containing_na <- data_normalized %>% filter_all(any_vars(is.na(.)))
+data_rows_containing_na <- data_normalized %>% 
+  filter_all(any_vars(is.na(.)))
 
 
 # We only want to get KNNs which have a value for the variable we are trying to impute,
 # so we filter out those that do not have a value for those
-data_rows_where_leg_is_not_na <- data_normalized %>% filter(!is.na(leg))
-data_rows_where_arml_is_not_na <- data_normalized %>% filter(!is.na(arml))
-data_rows_where_armc_is_not_na <- data_normalized %>% filter(!is.na(armc))
-data_rows_where_waist_is_not_na <- data_normalized %>% filter(!is.na(waist))
-data_rows_where_tri_is_not_na <- data_normalized %>% filter(!is.na(tri))
-data_rows_where_sub_is_not_na <- data_normalized %>% filter(!is.na(sub))
+data_rows_where_leg_is_not_na <- data_normalized %>% 
+  filter(!is.na(leg))
+data_rows_where_arml_is_not_na <- data_normalized %>% 
+  filter(!is.na(arml))
+data_rows_where_armc_is_not_na <- data_normalized %>% 
+  filter(!is.na(armc))
+data_rows_where_waist_is_not_na <- data_normalized %>% 
+  filter(!is.na(waist))
+data_rows_where_tri_is_not_na <- data_normalized %>% 
+  filter(!is.na(tri))
+data_rows_where_sub_is_not_na <- data_normalized %>% 
+  filter(!is.na(sub))
 
 
 # Calculate KNN for each observation which has NA in a given variable
@@ -182,47 +189,61 @@ seqns_with_NAs <- data %>%
 # from the KNN
 data <- data %>% 
   rowwise %>% 
-  mutate(armc = case_when(seqn %in% seqns_with_NAs ~ indexing_function(cur_data(),
-                                                                       armc_knn, 
-                                                                       "armc"),
+  mutate(armc = case_when(seqn %in% seqns_with_NAs ~ 
+                            indexing_function(cur_data(),
+                                              armc_knn, 
+                                              "armc"),
                           !seqn %in% seqns_with_NAs ~ armc))
 
 data <- data %>% 
   rowwise %>% 
-  mutate(arml = case_when(seqn %in% seqns_with_NAs ~ indexing_function(cur_data(),
-                                                                       arml_knn, 
-                                                                       "arml"),
+  mutate(arml = case_when(seqn %in% seqns_with_NAs ~ 
+                            indexing_function(cur_data(),
+                                              arml_knn, 
+                                              "arml"),
                           !seqn %in% seqns_with_NAs ~ arml))
 
 data <- data %>% 
   rowwise %>% 
-  mutate(leg = case_when(seqn %in% seqns_with_NAs ~ indexing_function(cur_data(),
-                                                                      leg_knn, 
-                                                                      "leg"),
+  mutate(leg = case_when(seqn %in% seqns_with_NAs ~ 
+                           indexing_function(cur_data(),
+                                             leg_knn, 
+                                             "leg"),
                          !seqn %in% seqns_with_NAs ~ leg))
 
 data <- data %>% 
   rowwise %>% 
-  mutate(sub = case_when(seqn %in% seqns_with_NAs ~ indexing_function(cur_data(),
-                                                                      sub_knn, 
-                                                                      "sub"),
+  mutate(sub = case_when(seqn %in% seqns_with_NAs ~ 
+                           indexing_function(cur_data(),
+                                             sub_knn, 
+                                             "sub"),
                          !seqn %in% seqns_with_NAs ~ sub))
 
 data <- data %>% 
   rowwise %>% 
-  mutate(tri = case_when(seqn %in% seqns_with_NAs ~ indexing_function(cur_data(),
-                                                                      tri_knn, 
-                                                                      "tri"),
+  mutate(tri = case_when(seqn %in% seqns_with_NAs ~ 
+                           indexing_function(cur_data(),
+                                             tri_knn, 
+                                             "tri"),
                          !seqn %in% seqns_with_NAs ~ tri))
 
 data <- data %>% 
   rowwise %>% 
-  mutate(waist = case_when(seqn %in% seqns_with_NAs ~ indexing_function(cur_data(),
-                                                                        waist_knn, 
-                                                                        "waist"),
+  mutate(waist = case_when(seqn %in% seqns_with_NAs ~ 
+                             indexing_function(cur_data(),
+                                               waist_knn, 
+                                               "waist"),
                            !seqn %in% seqns_with_NAs ~ waist))
 
+# Load data on diagnostic and treatment
+treatment_data <- read_tsv(file = "data/_raw/diagnose_and_treatment.tsv")
+
+# Join data
+clean_data_joined <- full_join(data, 
+                               treatment_data,
+                               by = c("tx", 
+                                      "dx"))
 
 # Write data --------------------------------------------------------------
-write_tsv(x = data,
+write_tsv(x = clean_data_joined,
           file = "data/02_nhgh_clean.tsv")
