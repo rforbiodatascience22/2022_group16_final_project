@@ -367,7 +367,8 @@ data %>%
 ```{r}
 corr <- data %>% 
   select( -c(seqn, sex, sex_class, re, tx, dx, bmi_class)) %>% 
-  cor( use = "complete.obs" )
+  cor( method = "pearson", 
+       use = "complete.obs" )
 ```
 
 ### Plotting correlations of the above multiple numerix variables using corrplot() function, which creates a graphical display of a correlation matrix, highlighting the most correlated variables in a data table.
@@ -383,7 +384,7 @@ corrplot(corr, type = "upper" , order = "hclust",
 
 
 ```{r}
-  cor(data[, c("bmi", "gh", "albumin", "bun")], use = "complete.obs") %>% 
+  cor(data[, c("bmi", "gh", "albumin", "bun")], method = "pearson", use = "complete.obs") %>% 
   pairs.panels()
 ```
 
