@@ -25,7 +25,7 @@ dx_total <- data %>%
 
 ###Plot diagnosis-status for age groups###
 ## Premenopausal aged women and men with equivalent age
-count(data,sex)
+count(data,gender)
 
 dx_below50 <- data %>% 
   filter(age <= 50) %>% 

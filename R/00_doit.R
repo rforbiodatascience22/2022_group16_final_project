@@ -1,6 +1,6 @@
 # Run all scripts ---------------------------------------------------------
 source(file = "R/01_load.R")
-source(file = "R/02_clean.R")
+source(file = "R/02_clean.R") #Runs slow, check README.txt
 source(file = "R/03_augment.R")
 source(file = "R/04_analysis_variable_exploration.R")
 source(file = "R/05_analysis_diabetes_related_visualisations.R")
