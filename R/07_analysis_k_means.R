@@ -29,26 +29,28 @@ res_kmeans = kmeans(kmeans_data, 10)
 kclusts <- 
   tibble(k = 1:9) %>%
   mutate(
-    kclust = map(k, ~kmeans(kmeans_data, .x)),
-    tidied = map(kclust, tidy),
-    glanced = map(kclust, glance),
-    augmented = map(kclust, augment, kmeans_data)
+    kclust = map(k, ~kmeans(kmeans_data, .x)),   # Cluster the data 10 times, each using a different value of k
+    tidied = map(kclust, tidy),                  # Column for tidied data  
+    glanced = map(kclust, glance),               # Column for glanced data
+    augmented = map(kclust, augment, kmeans_data) # Column for augmented data
   )
 
 
+
+# Split data 
 clusters <- 
   kclusts %>%
   unnest(cols = c(tidied))
 
-assignments <- 
+assignments <-   
   kclusts %>% 
   unnest(cols = c(augmented))
 
-clusterings <- 
+clusterings <-       # Column for glanced data, summary statistics across values of k
   kclusts %>%
   unnest(cols = c(glanced))
 
-# Visualise data ----------------------------------------------------------
+# Visualize data ----------------------------------------------------------
 
 
 p1 <- 

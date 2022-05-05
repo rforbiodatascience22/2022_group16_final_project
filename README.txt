@@ -103,3 +103,20 @@ This script stores all functions that are used throughout the project.
 ###Packages###
 The following packages should be installed for running the entire project:
 
+library("tidyverse")
+library("broom")
+library("dplyr")
+library("purrr")
+library("ggplot2")
+library("pdist")
+library("patchwork")
+library("scales")
+library("ggridges")
+library("psych")
+library("corrplot")
+library("stringr")
+library("glmnet")
+library("tidymodels")
+
+
+
