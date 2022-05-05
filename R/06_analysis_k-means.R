@@ -3,110 +3,36 @@ library("tidyverse")
 library("broom")
 library("dplyr")
 library("purrr")
-library("tidyr")
 library("ggplot2")
 
 # Define functions --------------------------------------------------------
 source(file = "R/99_project_functions.R")
 
-# Normalize data
-normalize<-function(x){
-  (x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
-}
+
+
 # Load data ---------------------------------------------------------------
-#all_data <- read_tsv(file = "data/01_nhgh.tsv")
-clean_data <- read_tsv(file = "data/02_nhgh_clean.tsv")
 
-my_test_data <-  select_if(clean_data, is.numeric) %>% select(-seqn) 
+clean_aug_data <- read_tsv(file = "data/03_nhgh_clean_aug.tsv")  
 
-my_test_data <- my_test_data %>%
+kmeans_data <-  select_if(clean_aug_data, is.numeric) %>% select(-seqn, -tx, -dx) 
+
+kmeans_data <- kmeans_data %>%
   mutate_all(normalize)
-
-cor_mat <- round(cor(clean_data),2)
-
 
 
 
 # Model data-----------------------------------------------------
 
-# Model data one k clusters------------------------------------------
-
-# Make 3 clusters
-kclust = kmeans(my_test_data, centers = 4)
-summary(kclust)
-kclust
-
-
-augmented = augment(kclust, my_test_data) #Model object and dataset, assign the cluster to each obs in the original df
-
-#Function for clustering plot of the data
-KMC_plot <- function(y_variable) {
-  
-  augmented_gathered <- augmented %>%
-    gather(key = "variable", value = "value",
-           -y_variable, -.cluster)   #key and value is names of the columns, y_variable is kept as a column, and the same for clusters. (from wide to long)
-  
- p1 <- ggplot(augmented_gathered, aes_string(x = "value", y = y_variable)) +
-    geom_point(aes(color = .cluster), alpha = 0.8) +
-    facet_wrap(~variable)
- p1
- return(p1)
-}
-
-
-
-
-#Why do this loop not work??
-for(i in colnames(my_test_data)){
-  pl = KMC_plot(i)
-  pl
-}
-
-
-age_pl = KMC_plot("age") # No clusters
-age_pl
-KMC_plot("income") #
-KMC_plot("tx")    #Nothing for factor
-KMC_plot("dx")    #Nothing for factor
-KMC_plot("wt")    #Linear correlations
-KMC_plot("ht")    # cluster in tx, dx why?? income
-KMC_plot("bmi")   #
-KMC_plot("leg")
-KMC_plot("arml")
-KMC_plot("armc")
-KMC_plot("waist")
-KMC_plot("tri")
-KMC_plot("sub")
-KMC_plot("gh")
-KMC_plot("albumin")
-KMC_plot("bun")
-KMC_plot("SCr")
-
-
-# Data description
-
-# Clusters  number of obs information of each point
-# Centers, withinss and size  Information about each cluster
-# totss, tot.withinss, betweens, iter   Information about the full clustering
-
-augment(kclust, my_test_data) # point classification
-tidy(kclust) #summarizes per-cluster level
-glance(kclust) #summarize in a single row
-
-
-
-
-# Model data multiple k clusters----------------------------------------
-
-res_kmeans = kmeans(my_test_data, 10)
+# Identify relevant number of clusters
+res_kmeans = kmeans(kmeans_data, 10)
 
 kclusts <- 
   tibble(k = 1:9) %>%
   mutate(
-    kclust = map(k, ~kmeans(my_test_data, .x)),
+    kclust = map(k, ~kmeans(kmeans_data, .x)),
     tidied = map(kclust, tidy),
     glanced = map(kclust, glance),
-    augmented = map(kclust, augment, my_test_data)
+    augmented = map(kclust, augment, kmeans_data)
   )
 
 
@@ -124,35 +50,62 @@ clusterings <-
 
 # Visualise data ----------------------------------------------------------
 
+
 p1 <- 
-  ggplot(assignments, aes(x = age, y = bmi)) +
+  ggplot(assignments, aes(x = age, y = wt)) +
   geom_point(aes(color = .cluster), alpha = 0.8) + 
   facet_wrap(~ k)
+
 p1
 
 ggplot(clusterings, aes(k, tot.withinss)) +
   geom_line() +
   geom_point()
 
-# Do something with the income variable
-# Normalize the data
-# Find a way to plot all against all variables
-#What is the project function
+# 3 clusters seem sufficient
 
 
 
-# Wrangle data ------------------------------------------------------------
-my_data_clean_aug %>% ...
+# Model data with 3 clusters------------------------------------------
+
+# Make 3 clusters
+
+kclust = kmeans(kmeans_data, centers = 3)
+summary(kclust)
+kclust
 
 
-# Model data
-my_data_clean_aug %>% ...
+augmented = augment(kclust, kmeans_data) #Model object and dataset, assign the cluster to each obs in the original df
+
+# Visualize data -----------------------------------------
+
+# Plotting all against all clustering 
+KMC_plot("age") # No clusters
+KMC_plot("income")
+KMC_plot("wt")    
+KMC_plot("ht")    
+KMC_plot("bmi")   
+KMC_plot("leg")
+KMC_plot("arml")
+KMC_plot("armc")
+KMC_plot("waist")
+KMC_plot("tri")
+KMC_plot("sub")
+KMC_plot("gh")
+KMC_plot("albumin")
+KMC_plot("bun")
+KMC_plot("SCr")
 
 
-# Visualise data ----------------------------------------------------------
-my_data_clean_aug %>% ...
+
+# Correlation matrix
+#library(ggcorrplot) #ggplot packages
+
+#cor_matrix <- round(cor(kmeans_data), 1)
+#ggcorrplot(cor_matrix)
 
 
-# Write data --------------------------------------------------------------
-write_tsv(...)
-ggsave(...)
+
+
+
+
