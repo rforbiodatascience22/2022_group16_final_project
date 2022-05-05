@@ -1,0 +1,67 @@
+---
+title: "Awsome titlte" 
+#"Exploring the influence of <br> personal measures in relation to diabetes #mellitus diagnosing "
+subtitle: "Group 16"
+author: 
+ - "Casper Rasmussen"
+ - "Line Sandvad Nielsen"
+ - "Tram Nguyen"
+ - "Varun Shankar"
+ - "Melanie Randahl Nielsen"
+date: "`r Sys.Date()`"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Introduction
+
+We became interested in this dataset due to wide spectrum of variables, going from income to Albumin and
+Blood urea nitrogen measurements. The data contains some missing values which we have to handle as well. <br>
+We would like to look into correlations in the data first of all, such as if income and gender seem to influence
+whether a person is diagnosed with diabetes mellitus (DM) or not. This could also be done by training a
+logistic regression classifier, however we are not sure yet to go down this path.
+We also find the opportunity to do a Principal Component Analysis exciting, in order to explore whether
+the variables in the dataset gives a clear clustering pattern to whether people are diagnosed with diabetes
+mellitus or not.
+
+
+## Material and Methods
+Make a flow chart of the process. 
+(can be done in powerpoint)
+(create “images” folder in the “doc” folder)
+
+- Bullet 1
+- Bullet 2
+- Bullet 3
+
+## NHANES glycohemoglobin data
+Short description of the data
+
+
+## Methods
+
+-  Explorative data analysis
+- Principle component analysis (PCA)
+- K-means clustering
+- Logistic regression model
+
+## Results and discussion 
+
+## Conclusion 
+
+
+## Slide with R Output
+
+```{r cars, echo = TRUE}
+summary(cars)
+```
+
+## Slide with Plot
+
+```{r pressure}
+plot(pressure)
+```
+
