@@ -4,7 +4,7 @@ library("ggplot2")
 library("dplyr")
 library("purrr")
 library("glmnet")
-library("tidymodels")
+library("corrr")
 
 
 # Define functions --------------------------------------------------------
