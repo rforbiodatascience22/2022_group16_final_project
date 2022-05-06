@@ -65,10 +65,16 @@ indexing_function <- function(x, y, var){
 #K-means clustering plot
 KMC_plot <- function(y_variable) {
   augmented_gathered <- augmented %>%
-    pivot_longer(c(-y_variable, -.cluster), names_to = "variable", values_to = "value")
+    pivot_longer(c(-y_variable,
+                   -.cluster), 
+                 names_to = "variable",
+                 values_to = "value")
    
-  p1 <- ggplot(augmented_gathered, aes_string(x = "value", y = y_variable)) +
-    geom_point(aes(color = .cluster), alpha = 0.8) +
+  p1 <- ggplot(data = augmented_gathered, 
+               mapping = aes_string(x = "value",
+                                    y = y_variable)) +
+    geom_point(mapping = aes(color = .cluster),
+               alpha = 0.8) +
     facet_wrap(~variable)
   p1
   return(p1)
