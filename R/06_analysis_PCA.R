@@ -1,8 +1,8 @@
 # Load libraries ----------------------------------------------------------
-library("tidyverse")
-library("broom")
-library("stringr")
-library("patchwork")
+library(tidyverse)
+library(broom)
+library(stringr)
+library(patchwork)
 
 
 source(file = "R/99_project_functions.R")
@@ -14,7 +14,8 @@ data <- read_tsv(file = "data/03_nhgh_clean_aug_1k.tsv")
 #(used for visualisations)
 data %>% count(`Treatment status`)
 
-# For data visualization purposes, arrange data
+#For data visualization purposes, arrange data 
+#(the group with the most observations should be the "lowest layer")
 data <- data %>% 
   arrange(Treatment_number)
 
@@ -30,15 +31,13 @@ pca_prep_data = select_data_subset(
     "Treatment_number"))
 
 #Count number of variables that PCA is based on
-vars = dim(pca_prep_data)[2]
+vars = pca_prep_data %>% ncol
 
-#The below is created with inspiration from 
-#https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/
 #perform PCA on standardized variables
 pca_ <- pca_prep_data %>% 
   prcomp(scale = TRUE) # do PCA on scaled data
 
-#Load in original dataset to principal components
+#Augment principal components to original data
 data_merge_pca = pca_ %>% 
   augment(data)
 
@@ -49,16 +48,18 @@ pca_matrix_eigen = pca_ %>%
   tidy(matrix = "eigenvalues")
 
 ggplot(data = pca_matrix_eigen,
-       mapping = aes(PC, percent)) +
-  geom_col(fill = "#3BB6FF", alpha = 0.8) +
+       mapping = aes(x = PC, 
+                     y = percent)) +
+  geom_col(fill = "#3BB6FF", 
+           alpha = 0.8) +
   labs(x = "Principal component",
        y = "Variance explained [%]",
-       title = "Variance explained within original dataset by each Principal Component") +
+       title = "Variance explained within original dataset by each Principal Component",
+       caption = "Inspired from: https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/") +
   scale_x_continuous(breaks = 1:vars) +
   scale_y_continuous(
     labels = scales::percent_format(),
-    expand = expansion(mult = c(0, 0.01))
-  )
+    expand = expansion(mult = c(0, 0.01)))
 
 
 #Extract variance explained by PC1 and PC2
@@ -70,18 +71,18 @@ PC2_label <- label_PCs(pca_eigen_matrix = pca_eigen_matrix,
 # Plot visualization in the PC1,PC2-plane
 # Color coordinates based on Treatment Status
 pca_plot <- ggplot(data = data_merge_pca,
-       mapping = aes(x = .fittedPC1, 
-                     y = .fittedPC2, 
-                     color = `Treatment status`)) + 
+                   mapping = aes(x = .fittedPC1, 
+                                 y = .fittedPC2, 
+                                 color = `Treatment status`)) + 
   geom_point(size = 1.5, alpha = 0.8) +
   labs(x = PC1_label,
        y = PC2_label,
        title = "Visualization of data in Principal Component coordinates",
        subtitle = "Colored based on Treatment status"
-       ) + 
+  ) + 
   theme(legend.position = "right",
         text = element_text(size = 11,
-                          family = "Avenir"))
+                            family = "Avenir"))
 
 
 #Plot rotation matrix
@@ -105,8 +106,8 @@ rot_label_axes <- rot_plot_axes(rotation_matrix)
 
 
 rot_plot = ggplot(data = rotation_matrix,
-       mapping = aes(PC1, 
-                     PC2)) +
+                  mapping = aes(PC1, 
+                                PC2)) +
   geom_segment(xend = 0, 
                yend = 0, 
                arrow = arrow_style) +
@@ -126,7 +127,8 @@ rot_plot = ggplot(data = rotation_matrix,
                             family = "Avenir"))
 
 #use patchwork library to display plots together
-pca_plot + rot_plot
+(pca_plot + rot_plot) + 
+  plot_annotation(caption = "Inspired from: https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/")
 
 
 ##Based on the results of the above analysis, we try to remove leg and arml
@@ -140,10 +142,11 @@ pca_prep_data = select_data_subset(
     "Treatment_number",
     "leg",
     "arml",
-    "bmi"))
+    "wt",
+    "ht"))
 
 #Count number of variables that PCA is based on
-vars = dim(pca_prep_data)[2]
+vars = pca_prep_data %>% ncol
 
 #perform PCA on standardized variables
 pca_ <- pca_prep_data %>% 
@@ -166,7 +169,8 @@ ggplot(data = pca_matrix_eigen,
            alpha = 0.8) +
   labs(x = "Principal component",
        y = "Variance explained [%]",
-       title = "Variance explained within original dataset by each Principal Component") +
+       title = "Variance explained within original dataset by each Principal Component",
+       caption = "Inspired from: https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/") +
   scale_x_continuous(breaks = 1:vars) +
   scale_y_continuous(
     labels = scales::percent_format(),
@@ -182,9 +186,9 @@ PC2_label = label_PCs(pca_eigen_matrix = pca_eigen_matrix,
 # Plot visualization in the PC1,PC2-plane
 # Color coordinates based on Treatment Status
 pca_plot = ggplot(data = data_merge_pca,
-       mapping = aes(x = .fittedPC1, 
-                     y = .fittedPC2, 
-                     color = `Treatment status`)) + 
+                  mapping = aes(x = .fittedPC1, 
+                                y = .fittedPC2, 
+                                color = `Treatment status`)) + 
   geom_point(size = 1.5, alpha = 0.8) +
   labs(x = PC1_label,
        y = PC2_label,
@@ -253,7 +257,7 @@ pca_prep_data = select_data_subset(
     "wt"))
 
 #Count number of variables that PCA is based on
-vars = dim(pca_prep_data)[2]
+vars = pca_prep_data %>% ncol
 
 #The below is created with inspiration from 
 #https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/
@@ -294,9 +298,9 @@ PC2_label = label_PCs(pca_eigen_matrix = pca_eigen_matrix,
 # Plot visualization in the PC1,PC2-plane
 # Color coordinates based on Treatment Status
 pca_plot = ggplot(data = data_merge_pca,
-       mapping = aes(x = .fittedPC1, 
-                     y = .fittedPC2, 
-                     color = `BMI category`)) + 
+                  mapping = aes(x = .fittedPC1, 
+                                y = .fittedPC2, 
+                                color = `BMI class`)) + 
   geom_point(size = 1.5, 
              alpha = 0.8, 
              shape = 17) +
@@ -307,7 +311,7 @@ pca_plot = ggplot(data = data_merge_pca,
   ) + 
   theme(legend.position = "right",
         text = element_text(size = 11,
-                          family = "Avenir")) 
+                            family = "Avenir")) 
 
 #Plot rotation matrix
 
