@@ -50,6 +50,16 @@ Short description of the data
 
 ## Results and discussion 
 
+## Principal Component Analysis
+### Investigating patterns in relation to diagnosis of diabetes melltius
+
+![](../results/PCA_dx_filtered.png){width=100%}
+
+## Principal Component Analysis
+### Investigating of patterns in relation to BMI
+
+![](../results/PCA_bmi.png){width=100%}
+
 ## Conclusion 
 
 
