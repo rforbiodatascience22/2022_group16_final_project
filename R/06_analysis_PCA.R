@@ -44,11 +44,11 @@ data_merge_pca = pca_ %>%
 
 #Show distribution of explained variance by PCs using Skree plot
 #Extract using tidy() from broom
-pca_matrix_eigen = pca_ %>%
+pca_matrix_eigen <- pca_ %>%
   tidy(matrix = "eigenvalues")
 
 ggplot(data = pca_matrix_eigen,
-       mapping = aes(x = PC, 
+       mapping = aes(x = PC,
                      y = percent)) +
   geom_col(fill = "#3BB6FF", 
            alpha = 0.8) +
@@ -61,6 +61,7 @@ ggplot(data = pca_matrix_eigen,
     labels = scales::percent_format(),
     expand = expansion(mult = c(0, 0.01)))
 
+ggsave("./results/scree_dx_full.pdf")
 
 #Extract variance explained by PC1 and PC2
 PC1_label <- label_PCs(pca_eigen_matrix = pca_eigen_matrix, 
