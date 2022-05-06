@@ -50,6 +50,14 @@ Short description of the data
 
 ## Results and discussion 
 
+
+## K-means clustering 
+![](../results/number_of_clusters_KMC.png){width=100%}
+
+## K-means clustering
+![](../results/age_against_all_KMC.png){width=100%}
+
+
 ## Conclusion 
 
 
