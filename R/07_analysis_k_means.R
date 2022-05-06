@@ -4,6 +4,7 @@ library("broom")
 library("dplyr")
 library("purrr")
 library("ggplot2")
+library("stringr")
 
 # Define functions --------------------------------------------------------
 source(file = "R/99_project_functions.R")

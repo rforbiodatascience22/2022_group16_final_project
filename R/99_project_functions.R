@@ -75,7 +75,12 @@ KMC_plot <- function(y_variable) {
                                     y = y_variable)) +
     geom_point(mapping = aes(color = .cluster),
                alpha = 0.8) +
-    facet_wrap(~variable)
+    facet_wrap(~variable) +
+    theme(axis.text.x = element_text(size = 8),
+          legend.position="bottom") +
+    labs(x = "Value",
+         y = str_to_title(y_variable))
+    
   p1
   return(p1)
 }
