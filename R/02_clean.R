@@ -244,6 +244,16 @@ clean_data_joined <- full_join(data,
                                by = c("tx", 
                                       "dx"))
 
-# Write data --------------------------------------------------------------
+# Write data for outlier detection in 04_analysis_variable_exploration ----
 write_tsv(x = clean_data_joined,
+          file = "data/02_nhgh_no_NA.tsv")
+
+
+# Removing outliers in SCr ------------------------------------------------
+
+data_outliers_removed <- clean_data_joined %>% 
+  filter(SCr < 5)
+
+# Write data --------------------------------------------------------------
+write_tsv(x = data_outliers_removed,
           file = "data/02_nhgh_clean.tsv")

@@ -12,6 +12,24 @@ library(corrplot)
 # Define functions --------------------------------------------------------
 source(file = "R/99_project_functions.R")
 
+# Load data with NAs imputed for outlier detection ------------------------
+
+data <- read_tsv(file = "data/02_nhgh_no_NA.tsv")
+
+# Normalize data to be able to show all variables in same plot
+data <- data %>% 
+  select(-(19:27),
+         -dx,
+         -tx) %>% 
+  mutate_all(normalize)
+
+# Boxplot showing outliers for all variables
+data %>% 
+  pivot_longer(cols = -seqn, names_to = "ID", values_to = "value") %>% 
+  ggplot(mapping = aes(x = ID, y = value)) +
+  geom_boxplot()
+  
+
 
 # Load data ---------------------------------------------------------------
 data <- read_tsv(file = "data/03_nhgh_clean_aug.tsv")
@@ -127,3 +145,4 @@ data %>%
        y = "Density",
        title = "Gender-based distribution of body fat percentage",
        subtitle = "Divided based on ethnicity")
+
