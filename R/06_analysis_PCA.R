@@ -11,7 +11,7 @@ source(file = "R/99_project_functions.R")
 data <- read_tsv(file = "data/03_nhgh_clean_aug_1k.tsv")
 
 # Count number of observations in each "Treatment status" category
-#(used for visualisations)
+#(used for visualizations)
 data %>% count(`Treatment status`)
 
 #For data visualization purposes, arrange data 
@@ -55,7 +55,7 @@ ggplot(data = pca_matrix_eigen,
   labs(x = "Principal component",
        y = "Variance explained [%]",
        title = "Variance explained within original dataset by each Principal Component",
-       caption = "Inspired from: https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/") +
+       caption = "Inspiration from: https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/") +
   scale_x_continuous(breaks = 1:vars) +
   scale_y_continuous(
     labels = scales::percent_format(),
@@ -129,7 +129,7 @@ rot_plot = ggplot(data = rotation_matrix,
 
 #use patchwork library to display plots together
 (pca_plot + rot_plot) + 
-  plot_annotation(caption = "Inspired from: https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/")
+  plot_annotation(caption = "Inspiration from: https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/")
 
 
 ##We try to remove arml, leg, wt and ht (wt and ht are directly correlated with bmi)
@@ -170,7 +170,7 @@ ggplot(data = pca_matrix_eigen,
   labs(x = "Principal component",
        y = "Variance explained [%]",
        title = "Variance explained within original dataset by each Principal Component",
-       caption = "Inspired from: https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/") +
+       caption = "Inspiration from: https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/") +
   scale_x_continuous(breaks = 1:vars) +
   scale_y_continuous(
     labels = scales::percent_format(),
@@ -241,7 +241,7 @@ rot_plot = ggplot(data = rotation_matrix,
                           family = "Avenir"))
 
 (pca_plot + rot_plot) + plot_annotation(
-  caption = "Inspired from: https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/")
+  caption = "Inspiration from: https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/")
 
 
 
@@ -261,8 +261,6 @@ pca_prep_data = select_data_subset(
 #Count number of variables that PCA is based on
 vars = pca_prep_data %>% ncol
 
-#The below is created with inspiration from 
-#https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/
 #perform PCA on standardized variables
 pca_ <- pca_prep_data %>% 
   prcomp(scale = TRUE) # do PCA on scaled data
@@ -278,13 +276,14 @@ pca_matrix_eigen = pca_ %>%
   tidy(matrix = "eigenvalues")
 
 ggplot(data = pca_matrix_eigen,
-       mapping = aes(PC, 
-                     percent)) +
+       mapping = aes(x = PC, 
+                     y = percent)) +
   geom_col(fill = "#3BB6FF", 
            alpha = 0.8) +
   labs(x = "Principal component",
        y = "Variance explained [%]",
-       title = "Variance explained within original dataset by each Principal Component") +
+       title = "Variance explained within original dataset by each Principal Component",
+       caption = "Inspiration from: https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/") +
   scale_x_continuous(breaks = 1:vars) +
   scale_y_continuous(
     labels = scales::percent_format(),
@@ -309,7 +308,7 @@ pca_plot = ggplot(data = data_merge_pca,
   labs(x = PC1_label,
        y = PC2_label,
        title = "Visualization of data in Principal Component coordinates",
-       subtitle = "Colored based on BMI category"
+       subtitle = "Colored based on BMI class"
   ) + 
   theme(legend.position = "right",
         text = element_text(size = 11,
@@ -335,8 +334,8 @@ rot_label_axes <- rot_plot_axes(rotation_matrix)
 
 
 rot_plot = ggplot(data = rotation_matrix,
-                  mapping = aes(PC1, 
-                                PC2)) +
+                  mapping = aes(x = PC1, 
+                                y = PC2)) +
   geom_segment(xend = 0, 
                yend = 0, 
                arrow = arrow_style) +
@@ -355,4 +354,6 @@ rot_plot = ggplot(data = rotation_matrix,
   theme(text = element_text(size = 11,
                             family = "Avenir"))
 
-pca_plot + rot_plot
+(pca_plot + rot_plot) + plot_annotation(
+  caption = "Inspiration from: https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/"
+)
