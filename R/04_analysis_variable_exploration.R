@@ -26,7 +26,8 @@ corr <- data %>%
        use = "complete.obs" )
 
 corrplot(corr, type = "upper" , order = "hclust", 
-         tl.col = "black", tl.srt = 45, tl.cex = 1)
+         tl.col = "black", tl.srt = 45, tl.cex = 1) 
+ggsave("./results/scree.png")
 
 
 ##Violin plot (and boxplots) of income, filtered on ethnicity 

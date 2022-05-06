@@ -52,4 +52,15 @@ This script will take around 10 minutes to run (depending on the server load on 
 
 ###Packages###
 The following packages should be installed for running the entire project:
-
+tidyverse
+ggplot2
+patchwork
+scales
+ggridges
+corrplot
+broom 
+stringr
+dplyr 
+purrr
+glmnet
+tidymodels 
