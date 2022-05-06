@@ -61,7 +61,7 @@ ggplot(data = pca_matrix_eigen,
     labels = scales::percent_format(),
     expand = expansion(mult = c(0, 0.01)))
 
-ggsave("./results/scree_dx_full.pdf")
+ggsave("./results/scree_dx_full.png")
 
 #Extract variance explained by PC1 and PC2
 PC1_label <- label_PCs(pca_eigen_matrix = pca_eigen_matrix, 
@@ -108,8 +108,8 @@ rot_label_axes <- rot_plot_axes(rotation_matrix)
 
 
 rot_plot = ggplot(data = rotation_matrix,
-                  mapping = aes(PC1, 
-                                PC2)) +
+                  mapping = aes(x = PC1, 
+                                y = PC2)) +
   geom_segment(xend = 0, 
                yend = 0, 
                arrow = arrow_style) +
@@ -131,6 +131,8 @@ rot_plot = ggplot(data = rotation_matrix,
 #use patchwork library to display plots together
 (pca_plot + rot_plot) + 
   plot_annotation(caption = "Inspiration from: https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/")
+
+ggsave("./results/PCA_dx_full.png")
 
 
 ##We try to remove arml, leg, wt and ht (wt and ht are directly correlated with bmi)
@@ -177,6 +179,8 @@ ggplot(data = pca_matrix_eigen,
     labels = scales::percent_format(),
     expand = expansion(mult = c(0, 0.01))
   )
+
+ggsave("./results/scree_dx_filtered.png")
 
 #Extract variance explained by PC1 and PC2
 PC1_label = label_PCs(pca_eigen_matrix = pca_eigen_matrix, 
@@ -244,7 +248,7 @@ rot_plot = ggplot(data = rotation_matrix,
 (pca_plot + rot_plot) + plot_annotation(
   caption = "Inspiration from: https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/")
 
-
+ggsave("./results/PCA_dx_filtered.png")
 
 
 
@@ -290,6 +294,8 @@ ggplot(data = pca_matrix_eigen,
     labels = scales::percent_format(),
     expand = expansion(mult = c(0, 0.01))
   )
+
+ggsave("./results/scree_bmi.png")
 
 #Extract variance explained by PC1 and PC2
 PC1_label = label_PCs(pca_eigen_matrix = pca_eigen_matrix, 
@@ -356,5 +362,6 @@ rot_plot = ggplot(data = rotation_matrix,
                             family = "Avenir"))
 
 (pca_plot + rot_plot) + plot_annotation(
-  caption = "Inspiration from: https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/"
-)
+  caption = "Inspiration from: https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/")
+
+ggsave("./results/PCA_bmi.png")
