@@ -79,6 +79,7 @@ kclust
 
 augmented = augment(kclust, kmeans_data) #Model object and dataset, assign the cluster to each obs in the original df
 
+
 # Visualize data -----------------------------------------
 
 # Plotting all against all clustering 
