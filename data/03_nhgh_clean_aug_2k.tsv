@@ -139,7 +139,6 @@ seqn	age	income	tx	dx	wt	ht	bmi	leg	arml	armc	waist	tri	sub	gh	albumin	bun	SCr	m
 51832	38	22500	0	0	78.9	174.5	25.91	40.2	37.1	31.3	95.3	15	30	5.7	4.5	14	1.02	1	0	0	0	0	0	1	Not diagnosed	1	Overweight
 51833	48	17500	0	0	66.5	158.8	26.37	37	35.4	30.5	88.6	27.2	27	6	4.3	18	1.01	0	1	1	0	0	0	0	Not diagnosed	1	Overweight
 51834	67	12500	1	1	49	146.5	22.83	31	33.8	26.5	86.1	15	19.7	12.3	4.4	16	0.58	0	1	0	0	1	0	0	Diagnosed and treated	2	Normal weight
-51836	51	40000	0	0	84.2	178.2	26.52	43.5	40.5	33.5	98	11	18.2	5.3	4.5	24	9.13	1	0	0	1	0	0	0	Not diagnosed	1	Overweight
 51837	14	30000	0	0	47.2	154.9	19.67	35.3	34.3	24	69.6	14	13.4	5.1	4.7	8	0.72	0	1	0	0	1	0	0	Not diagnosed	1	Normal weight
 51839	36	17500	0	0	142.3	178.9	44.46	43.38	39.98	42.36	128.2	27.48	28.48	6.3	4.3	11	0.98	1	0	0	0	0	1	0	Not diagnosed	1	Morbid obesity
 51841	12	22500	0	0	55.3	162.8	20.86	35.3	33.2	27.5	77.8	25.4	16.8	5.6	4.3	10	0.57	0	1	1	0	0	0	0	Not diagnosed	1	Normal weight
@@ -189,7 +188,6 @@ seqn	age	income	tx	dx	wt	ht	bmi	leg	arml	armc	waist	tri	sub	gh	albumin	bun	SCr	m
 51906	47	87500	0	0	108.9	178.4	34.22	43.5	39.74	37.84	112.3	19.42	26.08	6	3.8	16	0.97	1	0	1	0	0	0	0	Not diagnosed	1	Obese
 51907	23	12500	0	0	81.8	157.3	33.06	37.4	34	37.3	99	35.2	33.4	5.6	3.8	10	0.78	0	1	0	1	0	0	0	Not diagnosed	1	Obese
 51908	43	40000	0	0	94.4	154.5	39.55	33.74	36.86	40.38	115.84	34.32	32.84	5.6	4.1	9	0.52	0	1	0	0	0	1	0	Not diagnosed	1	Severe obesity
-51909	55	70000	1	1	124.1	183.8	36.74	44.46	40.32	42.62	119.92	24.8	29.32	6.9	4.3	34	7.15	1	0	0	1	0	0	0	Diagnosed and treated	2	Severe obesity
 51911	49	87500	0	0	89.2	186.5	25.65	46	43	34	96.7	15.8	27.5	5.4	4.4	20	1.09	1	0	1	0	0	0	0	Not diagnosed	1	Overweight
 51912	28	2500	0	0	95.9	158.2	38.32	40.26	36.86	39.98	114.98	25.86	35.56	5.6	4.1	9	0.86	0	1	1	0	0	0	0	Not diagnosed	1	Severe obesity
 51915	33	17500	0	1	151.3	179.9	46.75	40.78	41.18	44.82	141.38	29.88	28.06	5.9	4	8	0.9	1	0	1	0	0	0	0	Diagnosed and not treated	3	Morbid obesity
@@ -400,7 +398,6 @@ seqn	age	income	tx	dx	wt	ht	bmi	leg	arml	armc	waist	tri	sub	gh	albumin	bun	SCr	m
 52216	65	100000	0	0	59.8	140.8	30.16	35.3	36.4	30.5	96	24.2	20.4	5.8	4.2	8	0.72	0	1	1	0	0	0	0	Not diagnosed	1	Obese
 52217	48	57721.33448499244	0	1	92.7	161.6	35.5	32.78	34.44	37.72	112.98	34.04	32.48	5.5	4.1	12	0.66	0	1	0	0	0	0	1	Diagnosed and not treated	3	Severe obesity
 52219	13	87500	0	0	56.9	158.1	22.76	39.1	35.2	28.1	75.2	18.4	11.2	5.2	4.7	12	0.63	1	0	1	0	0	0	0	Not diagnosed	1	Normal weight
-52221	66	100000	0	0	67.8	175.5	22.01	39.5	40	27.8	88.4	9.4	9.1	5.5	4	56	6.34	1	0	1	0	0	0	0	Not diagnosed	1	Normal weight
 52222	39	50000	0	0	102.8	173.3	34.23	43.6	39.3	40.3	104	37	32	5.3	4	8	0.91	0	1	1	0	0	0	0	Not diagnosed	1	Obese
 52223	21	40000	0	0	84	169.8	29.13	43	39	34	99.2	18.2	23.2	5.2	4.5	10	0.79	1	0	0	0	1	0	0	Not diagnosed	1	Overweight
 52225	18	12500	0	0	64	154.2	26.92	36	33.4	29	88.9	19.9	27.3	5.4	4	10	0.62	0	1	0	0	0	1	0	Not diagnosed	1	Overweight
@@ -449,7 +446,6 @@ seqn	age	income	tx	dx	wt	ht	bmi	leg	arml	armc	waist	tri	sub	gh	albumin	bun	SCr	m
 52292	20	2500	0	0	83.8	165.8	30.48	43.4	37.3	35.2	98.5	30	32.8	5.8	4.2	9	0.66	0	1	0	1	0	0	0	Not diagnosed	1	Obese
 52293	56	100000	0	0	63	167.8	22.37	40.8	36.4	28.7	81.5	25.2	10.2	5.5	4.5	13	0.63	0	1	1	0	0	0	0	Not diagnosed	1	Normal weight
 52295	37	46196.691829191055	0	0	56.4	152.9	24.12	32.6	30.7	30	77.2	19.4	23.6	5.7	4	16	0.72	0	1	0	0	0	1	0	Not diagnosed	1	Normal weight
-52296	74	7500	0	0	61.4	159.9	24.01	38.5	34.3	28.6	95.5	17.2	13.7	5	4.2	21	5.82	1	0	0	0	0	0	1	Not diagnosed	1	Normal weight
 52297	18	40000	0	0	150	183.2	44.69	42.42	41.1	45.56	135.20000000000002	32.48	30.04	5.5	4	9	0.61	1	0	1	0	0	0	0	Not diagnosed	1	Morbid obesity
 52299	71	17500	0	0	72.3	167.9	25.65	38.5	38.3	32.1	88	21	9.3	5.5	3.8	16	0.84	0	1	1	0	0	0	0	Not diagnosed	1	Overweight
 52301	15	12500	0	0	74.3	160.5	28.84	39.5	38	32.5	87.5	22.4	18.4	5.1	4	8	0.77	0	1	0	1	0	0	0	Not diagnosed	1	Overweight
@@ -1619,7 +1615,6 @@ seqn	age	income	tx	dx	wt	ht	bmi	leg	arml	armc	waist	tri	sub	gh	albumin	bun	SCr	m
 54220	24	70000	0	0	55.6	160.1	21.69	39.7	35	25.6	67	21.4	16	4.3	4.3	9	0.71	0	1	0	1	0	0	0	Not diagnosed	1	Normal weight
 54221	16	60000	0	0	66.4	177.2	21.15	41.2	38.3	30.6	80.2	8	11.6	5.3	4.3	13	1.08	1	0	0	0	1	0	0	Not diagnosed	1	Normal weight
 54222	47	30000	0	0	76.5	162.4	29.01	39.2	34.8	32.7	92.6	31.8	28.2	5.3	4.1	10	0.81	0	1	1	0	0	0	0	Not diagnosed	1	Overweight
-54223	80	50000	0	0	92.4	180.8	28.27	37	40	33	111.6	21	24.2	5.9	3.8	53	5.57	1	0	1	0	0	0	0	Not diagnosed	1	Overweight
 54224	39	100000	0	0	63.8	172.4	21.47	40.1	37	26.1	81.3	17.2	11.6	5.4	4.2	13	0.78	0	1	1	0	0	0	0	Not diagnosed	1	Normal weight
 54225	28	30000	0	0	56.9	178.2	17.92	42.1	35.2	27.1	75.3	12.2	10.7	4.6	4.3	10	0.71	1	0	1	0	0	0	0	Not diagnosed	1	Underweight
 54226	20	100000	0	0	76.5	176.4	24.58	40.4	37	33.4	85.2	12.2	11.4	5.4	4.8	19	0.96	1	0	1	0	0	0	0	Not diagnosed	1	Normal weight
@@ -1700,7 +1695,6 @@ seqn	age	income	tx	dx	wt	ht	bmi	leg	arml	armc	waist	tri	sub	gh	albumin	bun	SCr	m
 54344	21	60000	0	0	46.9	154.3	19.7	34.2	32.5	27.4	67.2	16.4	11.6	5.1	4.4	15	0.78	0	1	0	0	0	1	0	Not diagnosed	1	Normal weight
 54345	15	2500	0	0	87.9	176.5	28.22	45.7	38.8	34.1	90.7	15.2	20.2	5.3	4.6	11	0.93	1	0	0	1	0	0	0	Not diagnosed	1	Overweight
 54346	67	50000	0	0	65.8	147	30.45	29.5	32.9	31	100.6	25.2	29.2	6	4.1	16	0.4	0	1	0	0	0	1	0	Not diagnosed	1	Obese
-54348	80	30000	0	1	67.8	159.4	26.68	33.3	36	28.5	99.5	16.8	24.4	5.3	3.4	31	9.38	1	0	1	0	0	0	0	Diagnosed and not treated	3	Overweight
 54349	37	17500	0	0	84.9	178.5	26.65	42.3	40	33.5	101.8	24.9	29.8	5.6	4.5	14	0.98	1	0	1	0	0	0	0	Not diagnosed	1	Overweight
 54351	80	17500	0	0	59	161	22.76	37.3	37	26.7	94.2	17.5	11.6	5.3	4.2	18	1.07	0	1	1	0	0	0	0	Not diagnosed	1	Normal weight
 54354	61	30000	0	0	88.2	168.9	30.92	30.7	38	32.1	105	18.6	30	5.4	4.6	16	0.95	1	0	1	0	0	0	0	Not diagnosed	1	Obese
@@ -2172,7 +2166,6 @@ seqn	age	income	tx	dx	wt	ht	bmi	leg	arml	armc	waist	tri	sub	gh	albumin	bun	SCr	m
 55102	68	30000	0	0	128.3	180.2	39.51	39.24	41.5	41.4	133.38	26.62	26.84	6.5	4.1	16	1.15	1	0	1	0	0	0	0	Not diagnosed	1	Severe obesity
 55104	39	2500	0	0	73.9	160.1	28.83	37.6	34	35.8	91.9	26.7	21.9	5.4	4.2	12	0.69	0	1	1	0	0	0	0	Not diagnosed	1	Overweight
 55105	23	30000	0	0	50.3	149.5	22.51	37	32	27.5	79.7	27	22.2	4.8	4.3	5	0.62	0	1	0	0	0	1	0	Not diagnosed	1	Normal weight
-55107	80	46196.691829191055	0	0	61.2	166.4	22.1	37.6	36.6	26.7	87.9	8.8	11	5.3	3.2	28	5.39	1	0	0	0	1	0	0	Not diagnosed	1	Normal weight
 55108	64	11429.733246584256	0	0	70.3	154.8	29.34	33.2	35.6	30.8	97.7	23	21.4	5.5	4.1	18	0.75	0	1	0	0	1	0	0	Not diagnosed	1	Overweight
 55110	26	70000	0	0	98.8	186.2	28.5	41.9	38.3	34.6	98.5	16.2	22.4	5.3	4.7	9	0.84	1	0	1	0	0	0	0	Not diagnosed	1	Overweight
 55112	31	30000	0	0	77.8	158.6	30.93	35	35	33.2	101.7	25.2	33	5.9	4.3	8	0.85	0	1	1	0	0	0	0	Not diagnosed	1	Obese
@@ -2288,7 +2281,6 @@ seqn	age	income	tx	dx	wt	ht	bmi	leg	arml	armc	waist	tri	sub	gh	albumin	bun	SCr	m
 55306	54	17500	0	0	65.2	161.2	25.09	36.2	34.5	33.2	90.1	29.8	29.4	6.2	4.1	12	0.87	0	1	0	1	0	0	0	Not diagnosed	1	Overweight
 55308	20	7500	0	0	88.1	181	26.89	40.5	40.2	34.9	88.9	14	12	5.4	4.2	7	0.86	1	0	1	0	0	0	0	Not diagnosed	1	Overweight
 55310	36	22500	0	0	55	166.2	19.91	39.1	34.3	24	69.5	16.6	9	5.3	4.7	6	0.53	0	1	1	0	0	0	0	Not diagnosed	1	Normal weight
-55311	56	30000	1	1	67.8	145.6	31.98	33.6	33.8	33.4	103.8	32	25.4	8.3	3.4	50	6.48	0	1	0	0	0	1	0	Diagnosed and treated	2	Obese
 55312	74	22500	0	0	66.2	172.3	22.3	36	35.6	27.8	89.1	14	18.4	5.6	4.1	22	1.11	1	0	0	0	0	0	1	Not diagnosed	1	Normal weight
 55313	74	46196.691829191055	0	0	81.2	160.6	31.48	35.3	34.9	32.1	115.3	25.8	22	5.4	4.3	18	0.83	0	1	1	0	0	0	0	Not diagnosed	1	Obese
 55316	50	100000	0	0	97.2	176.7	31.13	36.8	38.7	31.5	111.7	11	23	5.5	4.2	14	0.95	1	0	1	0	0	0	0	Not diagnosed	1	Obese
@@ -2894,7 +2886,6 @@ seqn	age	income	tx	dx	wt	ht	bmi	leg	arml	armc	waist	tri	sub	gh	albumin	bun	SCr	m
 56286	57	87500	0	0	68.9	166.9	24.73	35.5	38	28.8	96.5	22	20.6	5.7	3.8	18	0.82	0	1	1	0	0	0	0	Not diagnosed	1	Normal weight
 56288	44	40000	0	0	109.7	173.2	36.57	37.3	38.1	36.8	120.5	14	27.2	6.3	4	12	0.88	1	0	0	0	1	0	0	Not diagnosed	1	Severe obesity
 56289	50	12500	1	1	102.6	158.4	40.89	32.3	34.7	34.9	127.1	26	30.8	6.8	3.6	14	0.72	0	1	0	0	1	0	0	Diagnosed and treated	2	Morbid obesity
-56291	63	7500	0	0	72.1	175.9	23.3	45.4	37.2	29.5	92	5.2	8.2	4.7	4	39	5.42	1	0	0	1	0	0	0	Not diagnosed	1	Normal weight
 56292	41	100000	0	0	68.3	173.2	22.77	36.3	36.5	28.7	86.1	26.8	26	5.2	4.3	14	0.76	0	1	1	0	0	0	0	Not diagnosed	1	Normal weight
 56293	39	100000	0	0	78.7	180.7	24.1	42.8	37.4	31.9	90	14.2	9.4	5.5	4.3	22	0.8	0	1	1	0	0	0	0	Not diagnosed	1	Normal weight
 56294	39	100000	0	0	66.6	154.8	27.79	36.5	32	33	91.5	21.3	22.1	5.3	3.9	14	0.8	0	1	1	0	0	0	0	Not diagnosed	1	Overweight
@@ -2917,7 +2908,6 @@ seqn	age	income	tx	dx	wt	ht	bmi	leg	arml	armc	waist	tri	sub	gh	albumin	bun	SCr	m
 56320	34	2500	0	0	88.3	169.4	30.77	48.6	38	35	103.6	13	16.6	5.5	4.7	14	1	1	0	1	0	0	0	0	Not diagnosed	1	Obese
 56321	36	17500	0	0	91.5	165.2	33.53	39.62	36.02	34.64	100.14	32.8	32	5.2	3.9	11	0.85	0	1	0	1	0	0	0	Not diagnosed	1	Obese
 56323	53	60000	0	0	75.5	163	28.42	36.5	35.5	30.2	101.1	25	20.5	5.3	4	16	0.82	0	1	1	0	0	0	0	Not diagnosed	1	Overweight
-56325	16	40000	0	0	50	161.4	19.19	40.2	36.9	25	68.9	13.4	10.4	5.3	3.5	41	5	0	1	1	0	0	0	0	Not diagnosed	1	Normal weight
 56326	60	40000	0	0	78.7	159	31.13	37.120000000000005	35.5	33.7	101.76	30.24	33.32	6	4.4	13	1.03	0	1	0	1	0	0	0	Not diagnosed	1	Obese
 56328	47	70000	0	0	87.6	174.7	28.7	40.8	40	32	100	11.4	20.8	5.4	3.9	15	0.93	1	0	0	0	0	0	1	Not diagnosed	1	Overweight
 56329	40	17500	0	1	75.2	165.5	27.46	40	36.5	30.2	92	33	27	5.5	3.8	4	0.71	0	1	1	0	0	0	0	Diagnosed and not treated	3	Overweight
@@ -3743,7 +3733,6 @@ seqn	age	income	tx	dx	wt	ht	bmi	leg	arml	armc	waist	tri	sub	gh	albumin	bun	SCr	m
 57639	44	60000	0	0	62.3	171.6	21.16	40.6	35.4	28.1	83.8	20	12	5.1	4.2	8	0.63	0	1	1	0	0	0	0	Not diagnosed	1	Normal weight
 57640	72	50000	0	0	83.9	166.2	30.37	36.8	37.1	33.3	99.4	23.8	13	5.6	4.3	16	0.8	0	1	1	0	0	0	0	Not diagnosed	1	Obese
 57641	40	100000	0	0	74.9	162.1	28.5	38.8	36.1	33.1	94	28.5	24.5	5.2	4.3	15	0.69	0	1	1	0	0	0	0	Not diagnosed	1	Overweight
-57643	46	57721.33448499244	0	0	102	191.7	27.76	47.4	47	33	104.5	12.6	20.8	5.2	4.2	63	15.66	1	0	0	1	0	0	0	Not diagnosed	1	Overweight
 57645	28	17500	0	0	76.9	171.5	26.15	40.8	37.2	29.2	95.3	19	20.9	5.3	4.2	12	0.58	0	1	0	0	1	0	0	Not diagnosed	1	Overweight
 57647	35	30000	0	0	95.7	177.2	30.48	43.02	39.02	36.5	100.96	21.46	24.78	5.7	4	10	0.89	1	0	0	1	0	0	0	Not diagnosed	1	Obese
 57648	66	100000	1	1	123.1	178.4	38.68	40.56	41.52	38.82	125.34	25.56	26.86	5.9	3.9	17	1.17	1	0	1	0	0	0	0	Diagnosed and treated	2	Severe obesity
@@ -4029,10 +4018,8 @@ seqn	age	income	tx	dx	wt	ht	bmi	leg	arml	armc	waist	tri	sub	gh	albumin	bun	SCr	m
 58106	46	22500	0	0	90.2	172.8	30.21	38.3	38	31.9	104.6	27	33	5.3	4.3	13	0.75	0	1	0	0	1	0	0	Not diagnosed	1	Obese
 58108	62	100000	0	0	90.8	175.4	29.51	39.8	37.3	35.8	107.9	15	25.8	4.4	4.4	21	0.91	1	0	0	0	0	1	0	Not diagnosed	1	Overweight
 58110	18	30000	0	0	78.4	184.8	22.96	47.2	40.6	30.6	83.4	15.2	12.2	5.5	4.4	9	0.89	1	0	0	0	0	1	0	Not diagnosed	1	Normal weight
-58111	30	7500	1	1	82.3	163.9	30.64	38.68	37.66	35.62	107.86	25.56	32.339999999999996	13.4	2.7	59	6.24	0	1	0	1	0	0	0	Diagnosed and treated	2	Obese
 58112	66	46196.691829191055	1	1	88.8	168.3	31.35	39.82	37.64	33.08	107.96	13.66	25.7	8.4	4.2	8	1.24	1	0	0	0	0	1	0	Diagnosed and treated	2	Obese
 58115	79	40000	0	0	77.4	169.6	26.91	38.6	37.2	30.9	99.7	20.8	28.8	6.3	4.3	4	0.71	0	1	1	0	0	0	0	Not diagnosed	1	Overweight
-58117	80	17500	0	0	64.3	177.1	20.5	40.04	38.52	27.74	81.52	7.66	13.14	5	3.7	24	5.9	1	0	0	1	0	0	0	Not diagnosed	1	Normal weight
 58118	48	40000	0	0	102.1	178.4	32.08	43.54	41.02	36.18	108.92	16.6	25.34	5.1	4.6	10	1.01	1	0	0	0	0	1	0	Not diagnosed	1	Obese
 58119	78	60000	0	0	66.8	173.5	22.19	40.7	38.4	31.5	84.8	6.2	13.2	5.9	4	11	1.02	1	0	0	1	0	0	0	Not diagnosed	1	Normal weight
 58120	23	30000	0	0	45.7	161.3	17.56	36.6	32.8	22.8	67.3	13.5	9	5.3	4.2	13	0.62	0	1	0	0	0	0	1	Not diagnosed	1	Underweight
@@ -5637,7 +5624,6 @@ seqn	age	income	tx	dx	wt	ht	bmi	leg	arml	armc	waist	tri	sub	gh	albumin	bun	SCr	m
 60729	24	100000	0	0	76.1	166.7	27.39	39.8	37	32.6	91.8	32	28	4.8	4.4	12	0.74	0	1	1	0	0	0	0	Not diagnosed	1	Overweight
 60730	17	87500	0	0	84.3	186.6	24.21	48.5	41.8	33	90.2	22.1	16	5	4.9	9	0.79	1	0	1	0	0	0	0	Not diagnosed	1	Normal weight
 60732	13	22500	0	0	59.2	162.8	22.34	38.6	34.5	26.1	80.2	19.6	10.2	4.9	4.5	9	0.62	0	1	0	0	0	1	0	Not diagnosed	1	Normal weight
-60734	67	7500	0	1	89.3	178.2	28.12	33.8	42.4	36.1	103	29.2	37	5.4	4.2	36	7.6	1	0	0	1	0	0	0	Diagnosed and not treated	3	Overweight
 60735	76	17500	1	1	70.6	177.4	22.43	40.8	39	28.1	97.2	9.8	12.4	6.5	4.5	14	1.07	1	0	1	0	0	0	0	Diagnosed and treated	2	Normal weight
 60737	80	12500	0	1	59.5	171.4	20.25	43	38.7	23.5	81	7	9	5.8	4.2	27	1.32	1	0	1	0	0	0	0	Diagnosed and not treated	3	Normal weight
 60738	68	50000	0	0	130.3	162.3	49.47	35.72	38.44	43.24	124.62	31.82	33.9	6.3	4.6	10	0.91	0	1	0	1	0	0	0	Not diagnosed	1	Morbid obesity
@@ -5770,7 +5756,6 @@ seqn	age	income	tx	dx	wt	ht	bmi	leg	arml	armc	waist	tri	sub	gh	albumin	bun	SCr	m
 60954	30	70000	0	0	129.4	181.5	39.28	47.2	41.94	42.16	119.78	26.6	36.64	5.6	4.3	14	0.91	1	0	0	1	0	0	0	Not diagnosed	1	Severe obesity
 60956	69	40000	1	1	72.4	148.5	32.83	32.8	36.6	32	104.2	19.4	26.2	6	4	12	0.83	0	1	0	0	1	0	0	Diagnosed and treated	2	Obese
 60957	42	60000	0	0	64.4	156.7	26.23	37.7	35.4	30.5	83	21	24	5.4	4.2	9	0.72	0	1	0	0	0	1	0	Not diagnosed	1	Overweight
-60958	80	12500	0	0	84.6	170.6	29.07	37.16	37.06	29.82	94.66	10.72	14.2	5.4	3.9	31	5.98	1	0	0	0	1	0	0	Not diagnosed	1	Overweight
 60964	50	12500	0	0	64.9	158.4	25.87	34	36	31.2	92.5	19.8	21	6	4.3	10	0.77	0	1	0	1	0	0	0	Not diagnosed	1	Overweight
 60967	31	2500	0	0	75	177.7	23.75	43.2	39.5	32	92.9	19.2	20.4	5.5	4.3	7	0.89	1	0	1	0	0	0	0	Not diagnosed	1	Normal weight
 60969	64	40000	0	0	128.8	179.7	39.89	37.620000000000005	40.14	38.1	125.68	24.18	33.519999999999996	5.2	4.2	13	0.82	1	0	0	0	0	1	0	Not diagnosed	1	Severe obesity
@@ -6414,7 +6399,6 @@ seqn	age	income	tx	dx	wt	ht	bmi	leg	arml	armc	waist	tri	sub	gh	albumin	bun	SCr	m
 61991	32	30000	0	0	82.6	188.9	23.15	43.6	40.5	30.8	84.9	8	11.3	5.6	4.8	6	1.09	1	0	1	0	0	0	0	Not diagnosed	1	Normal weight
 61996	13	57721.33448499244	0	0	48.8	164.2	18.1	39.6	35.4	22.7	71.2	8.2	6	5.4	4.4	16	0.5	1	0	1	0	0	0	0	Not diagnosed	1	Underweight
 61997	16	46196.691829191055	0	0	62.6	160.9	24.18	40.2	35.9	29.6	85.3	26.2	30	5.1	3.9	11	0.56	0	1	0	0	1	0	0	Not diagnosed	1	Normal weight
-61998	27	60000	0	0	64.8	170.5	22.29	39.62	36.2	29.54	84.16	10.44	13.48	5.3	4.3	40	10.98	1	0	0	0	0	0	1	Not diagnosed	1	Normal weight
 61999	31	50000	0	0	72.6	158.4	28.94	36.7	33.3	31.2	99.5	22.7	24.3	5.2	4.1	14	0.83	0	1	1	0	0	0	0	Not diagnosed	1	Overweight
 62000	68	17500	1	1	65.7	149	29.59	33.5	32	29.3	103.2	19.5	20.1	6.7	4.3	9	0.57	0	1	0	0	0	1	0	Diagnosed and treated	2	Overweight
 62003	19	17500	0	0	76.7	173.3	25.54	41.6	37.5	32.6	83.2	11.9	15.5	5.2	4.8	11	1.03	1	0	0	0	0	1	0	Not diagnosed	1	Overweight
