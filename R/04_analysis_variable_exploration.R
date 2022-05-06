@@ -1,11 +1,9 @@
 # Load libraries ----------------------------------------------------------
 library(tidyverse)
 library(ggplot2)
-#library(gridExtra)
 library(patchwork)
 library(scales)
 library(ggridges)
-library(psych)
 library(corrplot)
 
 
@@ -25,9 +23,14 @@ data <- data %>%
 
 # Boxplot showing outliers for all variables
 data %>% 
-  pivot_longer(cols = -seqn, names_to = "ID", values_to = "value") %>% 
-  ggplot(mapping = aes(x = ID, y = value)) +
-  geom_boxplot()
+  pivot_longer(cols = -seqn, 
+               names_to = "ID", 
+               values_to = "value") %>% 
+  ggplot(mapping = aes(x = ID, 
+                       y = value)) +
+  geom_boxplot() +
+  labs(x = "Variable",
+       y = "Normalized value")
   
 
 

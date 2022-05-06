@@ -1,8 +1,8 @@
 # Load libraries ----------------------------------------------------------
-library(tidyverse)
-library(broom)
-library(stringr)
-library(patchwork)
+library("tidyverse")
+library("broom")
+library("stringr")
+library("patchwork")
 
 
 source(file = "R/99_project_functions.R")
@@ -74,7 +74,8 @@ pca_plot <- ggplot(data = data_merge_pca,
                    mapping = aes(x = .fittedPC1, 
                                  y = .fittedPC2, 
                                  color = `Treatment status`)) + 
-  geom_point(size = 1.5, alpha = 0.8) +
+  geom_point(size = 1.5, 
+             alpha = 0.8) +
   labs(x = PC1_label,
        y = PC2_label,
        title = "Visualization of data in Principal Component coordinates",
@@ -131,9 +132,8 @@ rot_plot = ggplot(data = rotation_matrix,
   plot_annotation(caption = "Inspired from: https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/")
 
 
-##Based on the results of the above analysis, we try to remove leg and arml
+##We try to remove arml, leg, wt and ht (wt and ht are directly correlated with bmi)
 #Clean dataset for pca
-
 pca_prep_data = select_data_subset(
   data, 
   c("seqn", 
@@ -163,8 +163,8 @@ pca_matrix_eigen = pca_ %>%
   tidy(matrix = "eigenvalues")
 
 ggplot(data = pca_matrix_eigen,
-       mapping = aes(PC, 
-                     percent)) +
+       mapping = aes(x = PC, 
+                     y = percent)) +
   geom_col(fill = "#3BB6FF", 
            alpha = 0.8) +
   labs(x = "Principal component",
@@ -189,7 +189,8 @@ pca_plot = ggplot(data = data_merge_pca,
                   mapping = aes(x = .fittedPC1, 
                                 y = .fittedPC2, 
                                 color = `Treatment status`)) + 
-  geom_point(size = 1.5, alpha = 0.8) +
+  geom_point(size = 1.5, 
+             alpha = 0.8) +
   labs(x = PC1_label,
        y = PC2_label,
        title = "Visualization of data in Principal Component coordinates",
@@ -219,8 +220,8 @@ arrow_style <- arrow(angle = 20,
                      length = grid::unit(8, "pt"))
 
 rot_plot = ggplot(data = rotation_matrix,
-                  mapping = aes(PC1, 
-                                PC2)) +
+                  mapping = aes(x = PC1, 
+                                y = PC2)) +
   geom_segment(xend = 0, 
                yend = 0, 
                arrow = arrow_style) +
@@ -239,7 +240,8 @@ rot_plot = ggplot(data = rotation_matrix,
   theme(text=element_text(size = 11,
                           family = "Avenir"))
 
-pca_plot + rot_plot
+(pca_plot + rot_plot) + plot_annotation(
+  caption = "Inspired from: https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/")
 
 
 

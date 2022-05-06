@@ -1,12 +1,12 @@
 # Load libraries ----------------------------------------------------------
-library(tidyverse)
-library(ggplot2)
-#library(gridExtra)
-library(patchwork)
-library(scales)
-library(ggridges)
-#library(psych)
-library(corrplot)
+library("tidyverse")
+library("ggplot2")
+library("patchwork")
+library("scales")
+library("ggridges")
+library("corrplot")
+library("broom")
+library("stringr")
 
 
 # Define functions --------------------------------------------------------
@@ -122,9 +122,7 @@ ggplot(data = dx_group_income,
                      fill = `Treatment`)) +
   geom_density_ridges(alpha = 0.5, scale = 0.95) + 
   theme_minimal(base_family = "Avenir") +
-  theme(plot.title = element_text(hjust = 2, 
-                                  vjust=0),
-        legend.position = "bottom",
+  theme(legend.position = "bottom",
         axis.text.y = element_text(angle = 25,
                                    size = 9)) +
   labs(title = "Distribution of people diagnosed with Diabetes Mellitus",
@@ -144,9 +142,7 @@ ggplot(data = dx_group_income,
              linetype = "dotted") + 
   geom_vline(xintercept = 63, 
              linetype = "dotted") + 
-  theme(plot.title = element_text(hjust = 1, 
-                                  vjust=0),
-        legend.position = "bottom",
+  theme(legend.position = "bottom",
         axis.text.y = element_text(angle = 25,
                                    size = 9)) +
   labs(title = "Distribution of people diagnosed with Diabetes Mellitus",
@@ -185,7 +181,7 @@ ggplot(data = data,
 #Barplot of distribution of diagnosis in genders
 ggplot(data = data,
        mapping = aes(x = gender,
-                     fill = diagnosed)) + 
+                     fill = `Diagnose status`)) + 
   geom_bar(alpha = 0.8) +
   theme(legend.position = "bottom",
         legend.title = element_blank()) +
@@ -232,6 +228,16 @@ ggplot(data = data_albumin_vis,
 
 
 #Density plot of albumin based on diagnosis
+t_test <- t.test(data_albumin_vis %>%
+                   filter(diagnosed == "Diagnosed") %>% 
+                   select(albumin), 
+                 data_albumin_vis %>% 
+                   filter(diagnosed == "Not diagnosed") %>% 
+                   select(albumin), 
+                 alternative = "less") %>% 
+  tidy()
+
+
 ggplot(data = data_albumin_vis,
        mapping = aes(x = albumin,
                      color = diagnosed)) + 
@@ -239,19 +245,14 @@ ggplot(data = data_albumin_vis,
   labs(x = "Albumin (g/dL)",
        y = "Density",
        title = "Distribution of Albumin levels",
-       subtitle = "Divided into diagnosed and not diagnosed with diabetes mellitus") +
+       subtitle = "Divided into diagnosed and not diagnosed with diabetes mellitus",
+       caption = str_c("P-value: ", 
+                       t_test %>% 
+                         select(p.value))) +
   theme(legend.position = "bottom",
         legend.title = element_blank())
 
 
-t.test(data_albumin_vis %>% 
-         filter(diagnosed == "Diagnosed") %>% 
-         select(albumin), 
-       data_albumin_vis %>% 
-         filter(diagnosed == "Not diagnosed") %>% 
-         select(albumin), 
-       alternative = "less") %>% 
-  tidy()
 
 
 #Density plot of albumin based on gender
