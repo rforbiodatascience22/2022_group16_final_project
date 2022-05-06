@@ -1,16 +1,5 @@
 # Define project functions ------------------------------------------------
 
-# Package checker function from https://stackoverflow.com/questions/9341635/check-for-installed-packages-before-running-install-packages
-pkgTest <- function(x)
-{
-  if (!require(x,character.only = TRUE))
-  {
-    install.packages(x,dep=TRUE)
-    if(!require(x,character.only = TRUE)) stop("Package not found")
-  }
-}
-
-
 # Used in 02_clean.R
 normalize<-function(x){
   (x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
