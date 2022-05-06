@@ -9,12 +9,13 @@ library("ggplot2")
 source(file = "R/99_project_functions.R")
 
 
-
 # Load data ---------------------------------------------------------------
 
 clean_aug_data <- read_tsv(file = "data/03_nhgh_clean_aug.tsv")  
 
-kmeans_data <-  select_if(clean_aug_data, is.numeric) %>% select(-seqn, -tx, -dx) 
+kmeans_data <- select_if(clean_aug_data, 
+                         is.numeric) %>% 
+  select(-seqn, -tx, -dx) 
 
 kmeans_data <- kmeans_data %>%
   mutate_all(normalize)
@@ -24,15 +25,21 @@ kmeans_data <- kmeans_data %>%
 # Model data-----------------------------------------------------
 
 # Identify relevant number of clusters
-res_kmeans = kmeans(kmeans_data, 10)
+res_kmeans <- kmeans(kmeans_data, 10)
 
 kclusts <- 
   tibble(k = 1:9) %>%
   mutate(
-    kclust = map(k, ~kmeans(kmeans_data, .x)),
-    tidied = map(kclust, tidy),
-    glanced = map(kclust, glance),
-    augmented = map(kclust, augment, kmeans_data)
+    kclust = map(k, 
+                 ~kmeans(kmeans_data,
+                         .x)),
+    tidied = map(kclust, 
+                 tidy),
+    glanced = map(kclust, 
+                  glance),
+    augmented = map(kclust, 
+                    augment, 
+                    kmeans_data)
   )
 
 
@@ -48,19 +55,26 @@ clusterings <-
   kclusts %>%
   unnest(cols = c(glanced))
 
-# Visualise data ----------------------------------------------------------
+# Visualize data ----------------------------------------------------------
 
 
-p1 <- 
-  ggplot(assignments, aes(x = age, y = wt)) +
-  geom_point(aes(color = .cluster), alpha = 0.8) + 
-  facet_wrap(~ k)
+ggplot(data = assignments, 
+       mapping = aes(x = age, 
+                     y = wt)) +
+  geom_point(mapping = aes(color = .cluster), 
+             alpha = 0.8) + 
+  facet_wrap(~ k) +
+  labs(x = "Age",
+       y = "Weight")
 
-p1
 
-ggplot(clusterings, aes(k, tot.withinss)) +
+ggplot(data = clusterings, 
+       mapping = aes(x = k, 
+                     y = tot.withinss)) +
   geom_line() +
-  geom_point()
+  geom_point() +
+  scale_x_continuous(breaks = seq(1,9,1)) +
+  labs(x = "Number of clusters (k)")
 
 # 3 clusters seem sufficient
 
@@ -70,12 +84,12 @@ ggplot(clusterings, aes(k, tot.withinss)) +
 
 # Make 3 clusters
 
-kclust = kmeans(kmeans_data, centers = 3)
-summary(kclust)
-kclust
+kclust = kmeans(x = kmeans_data, 
+                centers = 3)
 
+augmented = augment(x = kclust, 
+                    kmeans_data) #Model object and dataset, assign the cluster to each obs in the original df
 
-augmented = augment(kclust, kmeans_data) #Model object and dataset, assign the cluster to each obs in the original df
 
 # Visualize data -----------------------------------------
 
@@ -95,17 +109,3 @@ KMC_plot("gh")
 KMC_plot("albumin")
 KMC_plot("bun")
 KMC_plot("SCr")
-
-
-
-# Correlation matrix
-#library(ggcorrplot) #ggplot packages
-
-#cor_matrix <- round(cor(kmeans_data), 1)
-#ggcorrplot(cor_matrix)
-
-
-
-
-
-

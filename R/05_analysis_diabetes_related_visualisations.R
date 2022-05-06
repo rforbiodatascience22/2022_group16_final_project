@@ -1,12 +1,12 @@
 # Load libraries ----------------------------------------------------------
-library(tidyverse)
-library(ggplot2)
-library(gridExtra)
-library(patchwork)
-library(scales)
-library(ggridges)
-library(psych)
-library(corrplot)
+library("tidyverse")
+library("ggplot2")
+library("patchwork")
+library("scales")
+library("ggridges")
+library("corrplot")
+library("broom")
+library("stringr")
 
 
 # Define functions --------------------------------------------------------
@@ -17,7 +17,7 @@ source(file = "R/99_project_functions.R")
 data <- read_tsv(file = "data/03_nhgh_clean_aug.tsv")
 
 
-## Total diagnosed indviduals
+## Extract total diagnosed indivduals
 dx_total <- data %>% 
   filter(dx == 1) %>% 
   select(-seqn)
@@ -25,38 +25,40 @@ dx_total <- data %>%
 
 ###Plot diagnosis-status for age groups###
 ## Premenopausal aged women and men with equivalent age
-count(data,gender)
+data %>% count(gender)
 
 dx_below50 <- data %>% 
-  filter(age <= 50) %>% 
-  filter(dx == 1)
+  filter(age <= 50,
+         dx == 1)
 
-p1 <- dx_below50 %>% 
-  ggplot(aes(x = gender)) + 
-  geom_bar(aes(y = 100*(..count..)/data %>% filter(age <= 50) %>% nrow())) + 
-  #scale_y_continuous(breaks = seq(0,40,10)) + 
+diag_below50 <- dx_below50 %>% 
+  ggplot(mapping = aes(x = gender)) + 
+  geom_bar(aes(y = 100*(..count..)/data %>% 
+                 filter(age <= 50) %>% 
+                 nrow())) + 
   theme_classic() +  
   labs(x = "", 
-       y = "Percentage of total diagnosed individuals", 
-       subtitle = "Age group below 50", 
-       caption = "The average age for menopause in USA is 50")
+       y = "Diagnosed individuals [%]", 
+       subtitle = "Age group below 50")
 
 
 dx_above50 <- data %>% 
-  filter(age > 50) %>% 
-  filter(dx == 1)
+  filter(age > 50,
+         dx == 1)
 
-p2 <- dx_above50 %>% 
-  ggplot(aes(x = gender)) + 
-  geom_bar(aes(y = 100*(..count..)/data %>% filter(age >50) %>% nrow())) + 
-  #scale_y_continuous(breaks = seq(0,40,10)) + 
+diag_above50 <- dx_above50 %>% 
+  ggplot(mapping = aes(x = gender)) + 
+  geom_bar(aes(y = 100*(..count..)/data %>% 
+                 filter(age >50) %>% 
+                 nrow())) + 
   theme_classic() + 
   labs(x = "", 
-       y = " ", 
+       y = "", 
        subtitle = "Age group above 50")
 
-(p1 + p2) + 
-  plot_annotation(title = "Pre- and postmenopausal prevalence of diabetes mellitus")
+(diag_below50 + diag_above50) + 
+  plot_annotation(title = "Prevalence of diabetes mellitus",
+                  subtitle = "Divided on age and gender")
 
 
 
@@ -64,17 +66,20 @@ p2 <- dx_above50 %>%
 ##Boxplots showing relations between treatment, 
 #ethnicity and income
 dx_total %>% 
-  mutate(tx_class = case_when(tx == 0 ~ "Not treated", 
-                              tx == 1 ~ "Treated")) %>% 
-  ggplot(aes(x = re, 
-             y = income)) + 
+  mutate(tx_class = 
+           case_when(tx == 0 ~ "Not treated", 
+                     tx == 1 ~ "Treated")) %>% 
+  ggplot(mapping = aes(x = re, 
+                       y = income)) + 
   geom_boxplot() + 
   facet_wrap(~ tx_class) + 
   theme(panel.grid.major = element_blank(),
-        axis.text.x = element_text(angle = 25,size = 7)) + 
+        axis.text.x = element_text(angle = 25,
+                                   size = 7)) + 
   labs(x = " ", 
        y = "Annual income [USD]", 
-       title = "Annual income and ethnicity in relation to treatment status")
+       title = "Annual income and ethnicity in relation to treatment status",
+       subtitle = "In diagnosed individuals")
 
 
 
@@ -85,8 +90,8 @@ ggplot(data = dx_total,
                      fill = `Treatment status`)) + 
   geom_bar() +
   labs(title = "Distribution of diabetes mellitus patients",
-       subtitle = "Based on treatment or no treatment",
-       y = "Count of patients") +
+       subtitle = "Based on treatment status",
+       y = "Count of individuals") +
   theme(legend.position = "none")
 
 
@@ -117,10 +122,9 @@ ggplot(data = dx_group_income,
                      fill = `Treatment`)) +
   geom_density_ridges(alpha = 0.5, scale = 0.95) + 
   theme_minimal(base_family = "Avenir") +
-  geom_vline(xintercept = 52, linetype = "dotted") + 
-  geom_vline(xintercept = 63, linetype = "dotted") + 
-  theme(plot.title = element_text(hjust = 1, vjust=0),
-        legend.position = "bottom") +
+  theme(legend.position = "bottom",
+        axis.text.y = element_text(angle = 25,
+                                   size = 9)) +
   labs(title = "Distribution of people diagnosed with Diabetes Mellitus",
        x = "Age",
        y = "Income group") 
@@ -131,12 +135,16 @@ ggplot(data = dx_group_income,
        mapping = aes(x = age,
                      y = re,
                      fill = `Treatment`)) +
-  geom_density_ridges(alpha = 0.5, scale = 0.95) + 
+  geom_density_ridges(alpha = 0.5, 
+                      scale = 0.95) + 
   theme_minimal(base_family = "Avenir") +
-  geom_vline(xintercept = 52, linetype = "dotted") + 
-  geom_vline(xintercept = 63, linetype = "dotted") + 
-  theme(plot.title = element_text(hjust = 1, vjust=0),
-        legend.position = "bottom") +
+  geom_vline(xintercept = 52, 
+             linetype = "dotted") + 
+  geom_vline(xintercept = 63, 
+             linetype = "dotted") + 
+  theme(legend.position = "bottom",
+        axis.text.y = element_text(angle = 25,
+                                   size = 9)) +
   labs(title = "Distribution of people diagnosed with Diabetes Mellitus",
        x = "Age",
        y = "Ethnicity") 
@@ -144,25 +152,28 @@ ggplot(data = dx_group_income,
 
 
 data = data %>% 
-  mutate(diagnosed = case_when(
+  mutate(`Diagnose status` = case_when(
     dx == 0 ~ "Not diagnosed",
     dx == 1 ~ "Diagnosed"),
     setup_diagnose = 1,
     `BMI class` = factor(`BMI class`, levels = 
-                                  c("Underweight",
-                                    "Normal weight",
-                                    "Overweight",
-                                    "Obese",
-                                    "Severe obesity",
-                                    "Morbid obesity",
-                                    "Super obese")))
+                           c("Underweight",
+                             "Normal weight",
+                             "Overweight",
+                             "Obese",
+                             "Severe obesity",
+                             "Morbid obesity",
+                             "Super obese")))
 
 ggplot(data = data,
        mapping = aes(x = `BMI class`,
-                     fill = diagnosed)) +
+                     fill = `Diagnose status`)) +
   geom_bar(position="fill") + 
-  theme(axis.text.x = element_text(angle = 15))
-  
+  theme(axis.text.x = element_text(angle = 15)) +
+  labs(y = "Fraction",
+       title = "Distribution of diagnose status",
+       subtitle = "Based on BMI class")
+
 
 
 
@@ -170,7 +181,7 @@ ggplot(data = data,
 #Barplot of distribution of diagnosis in genders
 ggplot(data = data,
        mapping = aes(x = gender,
-                     fill = diagnosed)) + 
+                     fill = `Diagnose status`)) + 
   geom_bar(alpha = 0.8) +
   theme(legend.position = "bottom",
         legend.title = element_blank()) +
@@ -181,9 +192,12 @@ ggplot(data = data,
 
 #Due to the relation between diagnosis, gender and albumin levels (see below),
 #we test boxplots over BMI distributions for genders
-ggplot(data = data,
-       mapping = aes(x = gender,
-                     fill = `BMI class`)) +
+data %>% 
+  mutate(Gender = 
+           case_when(gender == "female" ~ "Female",
+                     gender == "male" ~ "Male")) %>% 
+  ggplot(mapping = aes(x = Gender,
+                       fill = `BMI class`)) +
   geom_bar(position = "dodge") +
   labs(x = "Gender",
        y = "Count of people")
@@ -214,6 +228,16 @@ ggplot(data = data_albumin_vis,
 
 
 #Density plot of albumin based on diagnosis
+t_test <- t.test(data_albumin_vis %>%
+                   filter(diagnosed == "Diagnosed") %>% 
+                   select(albumin), 
+                 data_albumin_vis %>% 
+                   filter(diagnosed == "Not diagnosed") %>% 
+                   select(albumin), 
+                 alternative = "less") %>% 
+  tidy()
+
+
 ggplot(data = data_albumin_vis,
        mapping = aes(x = albumin,
                      color = diagnosed)) + 
@@ -221,9 +245,14 @@ ggplot(data = data_albumin_vis,
   labs(x = "Albumin (g/dL)",
        y = "Density",
        title = "Distribution of Albumin levels",
-       subtitle = "Divided into diagnosed and not diagnosed with diabetes mellitus") +
+       subtitle = "Divided into diagnosed and not diagnosed with diabetes mellitus",
+       caption = str_c("P-value: ", 
+                       t_test %>% 
+                         select(p.value))) +
   theme(legend.position = "bottom",
         legend.title = element_blank())
+
+
 
 
 #Density plot of albumin based on gender
@@ -237,4 +266,3 @@ ggplot(data = data_albumin_vis,
        subtitle = "Divided by gender") +
   theme(legend.position = "bottom",
         legend.title = element_blank())
-
