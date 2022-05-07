@@ -22,8 +22,10 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ## Introduction
+- Diabetes is a prevalent disease worldwide 
+- Huge amount of data available regarding diabetes
+- Motivation: Use data to help understand which factors contribute to developing the disease
 
-Learning to use tidyverse for data exploration and modelling and bla bla
 
 # Materials
 
@@ -187,10 +189,10 @@ Diagnosis status across BMI class
 Age as a contributing factor to diagnosis across BMI class 
 
 
-![](../results/BMIclass_age_dx.png){width=100%, height=80%}
+![](../results/BMIclass_age_dx.png){width=100%}
 
-- Older individuals tend to be diagnosed to a greater extent compared to younger individuals. 
-- Increasing obesity levels seem to negatively influence the age of diagnosis. 
+<!-- - Older individuals tend to be diagnosed to a greater extent compared to younger individuals.  -->
+<!-- - Increasing obesity levels seem to negatively influence the age of diagnosis.  -->
 
 
 ## Explorative data analysis
@@ -242,7 +244,7 @@ Variables bmi, wt and ht were excluded
 
 Identify relevant number of clusters
 
-![](../results/number_of_clusters_KMC.png){width=100%}
+![](../results/number_of_clusters_KMC.png){width=95%}
 
 
 ## K-means clustering
@@ -252,26 +254,32 @@ Clusters between age and all other variables
 ![](../results/age_against_all_KMC.png){width=100%}
 
 ## Single Parameter Logistic Regression performance
+
 ![](../results/Single_Prediction.png){width=100%}
 
 ## Impact Estimation with confidence interval
+
 ![](../results/Impact_Estimation_with_confidence_interval.png){width=100%}
 
 ## Slide
+
 ![](../results/Parameters_vs_p_value.png){width=100%}
 
 ## Logistic Regression
+
 ![](../results/Prediction_on_colinearity_check.png){width=100%}
 
 
 
 ## Conclusion 
 
-Diagnosis of DM correlates with age, blood glucose, bmi, .... 
-Income and race does not appear to predict DM diagnosis or treatment status
-Blood glucose overrules other variables in predicting DM diagnosis
-Cannot cluster patients based on these variables alone
+- Diagnosis of DM correlates with age, blood glucose, bmi, albumin and to some degree BUN
+- Income, ethnicity and gender does not appear to predict DM diagnosis or treatment status
+- Blood glucose overrules other variables in predicting DM diagnosis
 
-Further research:
+
+In summary: We cannot cluster patients based on these variables alone
+
+Idea for further research:
 Appears that older people who have diabetes tend to be treated more often than younger people with diabetes
 
