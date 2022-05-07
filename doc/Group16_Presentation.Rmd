@@ -26,6 +26,7 @@ knitr::opts_chunk$set(echo = FALSE)
 - Huge amount of data available regarding diabetes
 - Motivation: Use data to help understand which factors contribute to developing the disease
 
+<!-- Line -->
 
 # Materials
 
@@ -40,6 +41,7 @@ knitr::opts_chunk$set(echo = FALSE)
 - <font size="3">Contains missing values to handle</font>
 - <font size="3">Explore correlations between diagnosis with DM and the other variables</font>
 
+<!-- Casper -->
 
 ## The data
 
@@ -79,6 +81,8 @@ variables_described %>%
                 font_size = 10)
 ```
 
+<!-- Casper -->
+
 ## Variable types
 
 ```{r}
@@ -94,6 +98,8 @@ variables_described %>%
 ```
 DX does not differentiate between type I and type II
 
+<!-- Casper -->
+
 ## Variables containing NAs
 
 ```{r}
@@ -107,10 +113,14 @@ variables_described %>%
   
 ```
 
+<!-- Casper -->
+
 # Methods
 
 ## Data journey
 ![](../doc/Images/flowchart.png){width=100%}
+
+<!-- Casper -->
 
 ## Data cleaning - Imputation of NAs
 
@@ -138,6 +148,8 @@ variables_described %>%
 
 Here we implemented KNN (K=5) in tidyverse. We did not optimize K.
 
+<!-- Casper -->
+
 ## Data cleaning - Removal of outliers
 
 ![](../results/outliers.png){width=100%}
@@ -156,6 +168,7 @@ variables_described %>%
 Normal range is 0.6 - 1.2 mg/dL, 5+ indicates severe kidney impairment. We removed all values above 5 (17 total values).
 <font size="2">Source: https://www.medicinenet.com/creatinine_blood_test/article.htm</font>
 
+<!-- Casper -->
 
 # Results & Discussion
 
@@ -174,6 +187,8 @@ Positive correlations primarily betweeen body-size related variables.
 
 </div>
 
+<!-- Tram -->
+
 ## Explorative data analysis
 
 Diagnosis status across BMI class 
@@ -183,6 +198,7 @@ Diagnosis status across BMI class
 
 - Excess weight and increasing obesity levels seem to be a contributing factor to the development of diabetes. 
 
+<!-- Tram -->
 
 ## Explorative data analysis
 
@@ -194,6 +210,7 @@ Age as a contributing factor to diagnosis across BMI class
 <!-- - Older individuals tend to be diagnosed to a greater extent compared to younger individuals.  -->
 <!-- - Increasing obesity levels seem to negatively influence the age of diagnosis.  -->
 
+<!-- Tram -->
 
 ## Explorative data analysis
 
@@ -205,6 +222,8 @@ Treatment status of different ethnicity and age
 - Older individuals tend to receive treatment to a larger extent compared to younger individuals. 
 - No correlation between treatment status and ethnicity.
 
+<!-- Tram -->
+
 ## Explorative data analysis
 
 Influence of income and ethnicity on treatment status 
@@ -214,6 +233,7 @@ Influence of income and ethnicity on treatment status
 
 Annual income levels and ethinicity do not seem to influence treatment status. 
 
+<!-- Tram -->
 
 ## Explorative data analysis
 
@@ -222,6 +242,7 @@ Serum albumin levels in relation to diagnosis
 ![](../results/Albumin_dx.png){width=100%, height=70%}
 Serum albumin is lower in diagnosed compared to non-diagnosed individuals. 
 
+<!-- Tram -->
 
 ## Principal Component Analysis
 Investigation of patterns concerning diagnosis of diabetes mellitus
@@ -230,6 +251,7 @@ Investigation of patterns concerning diagnosis of diabetes mellitus
 
 Variables dx, tx, leg, arml, wt and ht were excluded
 
+<!-- Line -->
 
 ## Principal Component Analysis
 
@@ -240,12 +262,15 @@ Investigation of patterns in relation to BMI
 
 Variables bmi, wt and ht were excluded
 
+<!-- Line -->
+
 ## K-means clustering 
 
 Identify relevant number of clusters
 
 ![](../results/number_of_clusters_KMC.png){width=95%}
 
+<!-- Melanie -->
 
 ## K-means clustering
 
@@ -253,23 +278,31 @@ Clusters between age and all other variables
 
 ![](../results/age_against_all_KMC.png){width=100%}
 
+<!-- Melanie -->
+
 ## Single Parameter Logistic Regression performance
 
 ![](../results/Single_Prediction.png){width=100%}
+
+<!-- Varun -->
 
 ## Impact Estimation with confidence interval
 
 ![](../results/Impact_Estimation_with_confidence_interval.png){width=100%}
 
-## Slide
+<!-- Varun -->
+
+## Parameters vs p value
 
 ![](../results/Parameters_vs_p_value.png){width=100%}
+
+<!-- Varun -->
 
 ## Logistic Regression
 
 ![](../results/Prediction_on_colinearity_check.png){width=100%}
 
-
+<!-- Varun -->
 
 ## Conclusion 
 
@@ -283,3 +316,4 @@ In summary: We cannot cluster patients based on these variables alone
 Idea for further research:
 Appears that older people who have diabetes tend to be treated more often than younger people with diabetes
 
+<!-- Melanie -->
