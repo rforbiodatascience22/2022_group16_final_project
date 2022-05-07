@@ -163,12 +163,11 @@ variables_described %>%
 
 ## Explorative data analysis
 
-<font size="4">Diagnosis status across BMI class</font>
+<font size="4">Weight and obesity levels as a contributing factor to diagnosis</font>
 
 
 ![](../results/BMI_dx.png){width=100%}
 
-- <font size="4">Excess weight and increasing obesity levels seem to be a contributing factor to the development of diabetes.</font>
 
 <!-- Tram -->
 
