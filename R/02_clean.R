@@ -109,14 +109,14 @@ data <- data %>%
               values_from = bin,
               values_fill = 0)
 
-# Imputation of other NAs -------------------------------------
+# Imputation of other NAs via KNN -------------------------------------
 
 
-# Drop rows with too many NAs to impute
+# Drop rows with too many NAs to do reliable KNN
 data <- data %>% 
   filter(rowSums(is.na(.)) < 3)
 
-# columns which contain NAs:
+# get names of variables which contain NAs:
 cols_with_NA <- data %>% 
   select_if(function(x) any(is.na(x))) %>% 
   colnames()
@@ -130,7 +130,7 @@ data_normalized <- data %>%
   mutate_all(normalize)
 
 
-# Get only rows which contain NA (we dont need distances for those that do not contain NA)
+# Get only rows which contain NAs (we dont need distances for those that do not contain NA)
 data_rows_containing_na <- data_normalized %>% 
   filter_all(any_vars(is.na(.)))
 
@@ -152,6 +152,8 @@ data_rows_where_sub_is_not_na <- data_normalized %>%
 
 
 # Calculate KNN for each observation which has NA in a given variable
+# using knn function from 99_project_functions.
+# NB: This takes ~15-25 seconds to run per variable on RStudio Cloud
 armc_knn <- knn(data_rows_containing_na, 
                 data_rows_where_armc_is_not_na, 
                 var = "armc",
@@ -186,7 +188,8 @@ seqns_with_NAs <- data %>%
 
 
 # In the original data, when a row contains NAs in a given variable replace it with the mean value of that variable
-# from the KNN
+# from the KNN list-column.
+############## NB: This runs quite slow, 1-2 minutes per variable. Go get a coffee! #############
 data <- data %>% 
   rowwise %>% 
   mutate(armc = case_when(seqn %in% seqns_with_NAs ~ 

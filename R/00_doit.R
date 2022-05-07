@@ -1,4 +1,5 @@
 # Run all scripts ---------------------------------------------------------
+source(file = "R/98_check_packages.R")
 source(file = "R/01_load.R")
 source(file = "R/02_clean.R") #Runs slow, check README.txt
 source(file = "R/03_augment.R")

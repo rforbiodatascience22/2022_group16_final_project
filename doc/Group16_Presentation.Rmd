@@ -17,51 +17,47 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ## Introduction
+### How personal parameters influence diabetes diagnosis 
 
-We became interested in this dataset due to wide spectrum of variables, going from income to Albumin and
-Blood urea nitrogen measurements. The data contains some missing values which we have to handle as well. <br>
-We would like to look into correlations in the data first of all, such as if income and gender seem to influence
-whether a person is diagnosed with diabetes mellitus (DM) or not. This could also be done by training a
-logistic regression classifier, however we are not sure yet to go down this path.
-We also find the opportunity to do a Principal Component Analysis exciting, in order to explore whether
-the variables in the dataset gives a clear clustering pattern to whether people are diagnosed with diabetes
-mellitus or not.
+-  Is the diagnosis influenced by income and gender
+-  Explore clustering patterns in the data
+-  Is there specific variables related to if a person is treated
 
 
-## Material and Methods
-Make a flow chart of the process. 
-(can be done in powerpoint)
-(create “images” folder in the “doc” folder)
-
-- Bullet 1
-- Bullet 2
-- Bullet 3
 
 ## NHANES glycohemoglobin data
-Short description of the data
+![](../doc/Images/data_description.png)
 
 
 ## Methods
+![](../doc/Images/flowchart.png){width=100%}
 
--  Explorative data analysis
-- Principle component analysis (PCA)
-- K-means clustering
-- Logistic regression model
 
-## Results and discussion 
+
+
+
+## Principal Component Analysis
+### Investigating patterns in relation to diagnosis of diabetes melltius
+
+![](../results/PCA_dx_filtered.png){width=100%}
+
+## Principal Component Analysis
+### Investigating of patterns in relation to BMI
+
+![](../results/PCA_bmi.png){width=100%}
+
+
+
+## K-means clustering 
+### Identify relevant number of clusters
+![](../results/number_of_clusters_KMC.png){width=100%}
+
+## K-means clustering
+### CLusters between age and all other variables
+![](../results/age_against_all_KMC.png){width=100%}
 
 ## Conclusion 
 
 
-## Slide with R Output
 
-```{r cars, echo = TRUE}
-summary(cars)
-```
-
-## Slide with Plot
-
-```{r pressure}
-plot(pressure)
-```
 
