@@ -105,7 +105,7 @@ variables_described %>%
                 font_size = 10) %>% 
   row_spec(row =1, background = 'pink')
 ```
-Here we assigned the mean from all non-NA values of income.
+<font size="4">Here we assigned the mean from all non-NA values of income.</font>
 
 
 ```{r}
@@ -118,15 +118,15 @@ variables_described %>%
   row_spec(row = 1:6, background = 'lightgreen')
 ```
 
-Here we implemented KNN (K=5) in tidyverse. We did not optimize K.
+<font size="4">Here we implemented KNN (K=5) in tidyverse. We did not optimize K.</font>
 
 <!-- Casper -->
 
 ## Data cleaning - Removal of outliers
 
-![](../results/outliers.png){width=70%}
+![](../results/outliers.png){width=75%}
 
-Biochemical variables have more outliers
+<font size="4">Biochemical variables have more outliers</font>
 
 ```{r}
 variables_described %>% 
@@ -137,7 +137,7 @@ variables_described %>%
                 font_size = 10)
 ```
 
-Normal range is 0.6 - 1.2 mg/dL, 5+ indicates severe kidney impairment. We removed all values above 5 (17 total values).
+<font size="4">Normal range is 0.6 - 1.2 mg/dL, 5+ indicates severe kidney impairment. We removed all values above 5 (17 total values).</font>
 <font size="2">Source: https://www.medicinenet.com/creatinine_blood_test/article.htm</font>
 
 <!-- Casper -->
@@ -146,14 +146,14 @@ Normal range is 0.6 - 1.2 mg/dL, 5+ indicates severe kidney impairment. We remov
 
 ## Explorative data analysis
 
-Linear correlation between numeric variables 
+<font size="4">Linear correlation between numeric variables</font>
 <div class = "columns-2">
 
 ![](../results/corrplot.png){width=100%, height=100%}
 
 <br>
 <br>
-Positive correlations primarily betweeen body-size related variables.   
+<font size="4">Positive correlations primarily betweeen body-size related variables.</font>
 
 
 
@@ -163,18 +163,18 @@ Positive correlations primarily betweeen body-size related variables.
 
 ## Explorative data analysis
 
-Diagnosis status across BMI class 
+<font size="4">Diagnosis status across BMI class</font>
 
 
 ![](../results/BMI_dx.png){width=100%}
 
-- Excess weight and increasing obesity levels seem to be a contributing factor to the development of diabetes. 
+- <font size="4">Excess weight and increasing obesity levels seem to be a contributing factor to the development of diabetes.</font>
 
 <!-- Tram -->
 
 ## Explorative data analysis
 
-Age as a contributing factor to diagnosis across BMI class 
+<font size="4">Age as a contributing factor to diagnosis across BMI class</font>
 
 
 ![](../results/BMIclass_age_dx.png){width=100%}
@@ -186,38 +186,38 @@ Age as a contributing factor to diagnosis across BMI class
 
 ## Explorative data analysis
 
-Treatment status of different ethnicity and age 
+<font size="4">Treatment status of different ethnicity and age</font>
 
 
 ![](../results/Age_ethnicity_tx.png){width=100%, height=70%}
 
-- Older individuals tend to receive treatment to a larger extent compared to younger individuals. 
-- No correlation between treatment status and ethnicity.
+- <font size="4">Older individuals tend to receive treatment to a larger extent compared to younger individuals.</font>
+- <font size="4">No correlation between treatment status and ethnicity.</font>
 
 <!-- Tram -->
 
 
 ## Explorative data analysis
 
-Serum albumin levels in relation to diagnosis 
+<font size="4">Serum albumin levels in relation to diagnosis</font>
 
 ![](../results/Albumin_dx.png){width=100%, height=70%}
-Serum albumin is lower in diagnosed compared to non-diagnosed individuals. 
+<font size="4">Serum albumin is lower in diagnosed compared to non-diagnosed individuals.</font>
 
 <!-- Line -->
 
 ## Principal Component Analysis
-Investigation of patterns concerning diagnosis of diabetes mellitus
+<font size="4">Investigation of patterns concerning diagnosis of diabetes mellitus</font>
 
 ![](../results/PCA_dx_filtered.png){width=100%}
 
-Variables dx, tx, leg, arml, wt and ht were excluded
+<font size="4">Variables dx, tx, leg, arml, wt and ht were excluded</font>
 
 <!-- Line -->
 
 ## K-means clustering 
 
-Identify relevant number of clusters
+<font size="4">Identify relevant number of clusters</font>
 
 ![](../results/number_of_clusters_KMC.png){width=95%}
 
@@ -225,7 +225,7 @@ Identify relevant number of clusters
 
 ## K-means clustering
 
-Clusters between age and all other variables
+<font size="4">Clusters between age and all other variables</font>
 
 ![](../results/age_against_all_KMC.png){width=100%}
 
@@ -233,7 +233,7 @@ Clusters between age and all other variables
 
 ## Single Parameter Logistic Regression
 
-<font size="3"> Performing single parameter evaluation to have a baseline</font>
+<font size="4"> Performing single parameter evaluation to have a baseline</font>
 
 
 ![](../results/Single_Prediction.png){width=100%}
@@ -264,14 +264,14 @@ Clusters between age and all other variables
 
 ## Conclusion 
 
-- Diagnosis of DM correlates with age, blood glucose, bmi, albumin and to some degree BUN
-- Income, ethnicity and gender does not appear to predict DM diagnosis or treatment status
-- Blood glucose overrules other variables in predicting DM diagnosis
+- <font size="4">Diagnosis of DM correlates with age, blood glucose, bmi, albumin and to some degree BUN</font>
+- <font size="4">Income, ethnicity and gender does not appear to predict DM diagnosis or treatment status</font>
+- <font size="4">Blood glucose overrules other variables in predicting DM diagnosis</font>
 
 
-In summary: We cannot cluster patients based on these variables alone
+<font size="4">In summary: We cannot cluster patients based on these variables alone</font>
 
-Idea for further research:
-Appears that older people who have diabetes tend to be treated more often than younger people with diabetes
+<font size="4">Idea for further research:</font>
+<font size="4">Appears that older people who have diabetes tend to be treated more often than younger people with diabetes</font>
 
 <!-- Melanie -->
