@@ -251,6 +251,20 @@ Clusters between age and all other variables
 
 ![](../results/age_against_all_KMC.png){width=100%}
 
+## Single Parameter Logistic Regression performance
+![](../results/Single_Prediction.png){width=100%}
+
+## Impact Estimation with confidence interval
+![](../results/Impact_Estimation_with_confidence_interval.png){width=100%}
+
+## Slide
+![](../results/Parameters_vs_p_value.png){width=100%}
+
+## Logistic Regression
+![](../results/Prediction_on_colinearity_check.png){width=100%}
+
+
+
 ## Conclusion 
 
 Diagnosis of DM correlates with age, blood glucose, bmi, .... 

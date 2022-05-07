@@ -331,7 +331,7 @@ ggsave("./results/Single_Prediction.png")
 
 
 #xtabs(~ dx + predicted_mult3, data=mlm_prediction_vs_dx)
-#xtabs (~ dx + predicted_mult4, data=mlm_after_colinearity_check_srt)
+# confus_mat <- as_tibble(xtabs (~ dx + predicted_mult4, data=mlm_after_colinearity_check_srt))
 #xtabs (~ dx + predicted_single, data =data_gh_single)
 #xtabs(~ dx + predicted_single_bmi, data = data_bmi_single )
 
