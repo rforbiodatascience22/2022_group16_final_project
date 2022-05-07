@@ -23,7 +23,7 @@ data <- data %>%
 ###Do PCA to predict/cluster diabetes status
 
 #Clean dataset for pca; remove 
-pca_prep_data = select_data_subset(
+pca_prep_data <- select_data_subset(
   data, 
   c("seqn", 
     "dx",
@@ -31,14 +31,14 @@ pca_prep_data = select_data_subset(
     "Treatment_number"))
 
 #Count number of variables that PCA is based on
-vars = pca_prep_data %>% ncol
+vars <- pca_prep_data %>% ncol
 
 #perform PCA on standardized variables
 pca_ <- pca_prep_data %>% 
   prcomp(scale = TRUE) # do PCA on scaled data
 
 #Augment principal components to original data
-data_merge_pca = pca_ %>% 
+data_merge_pca <- pca_ %>% 
   augment(data)
 
 
@@ -80,11 +80,13 @@ pca_plot <- ggplot(data = data_merge_pca,
   labs(x = PC1_label,
        y = PC2_label,
        title = "Visualization of data in Principal Component coordinates",
-       subtitle = "Colored based on Treatment status"
+       subtitle = "Colored based on diagnosis and treatment status",
+       color = ""
   ) + 
-  theme(legend.position = "right",
+  theme(legend.position = "bottom",
         text = element_text(size = 11,
-                            family = "Avenir"))
+                            family = "Avenir")) +
+  guides(color = guide_legend(nrow = 2, byrow = TRUE))
 
 
 #Plot rotation matrix
@@ -107,9 +109,9 @@ arrow_style <- arrow(angle = 20,
 rot_label_axes <- rot_plot_axes(rotation_matrix)
 
 
-rot_plot = ggplot(data = rotation_matrix,
-                  mapping = aes(x = PC1, 
-                                y = PC2)) +
+rot_plot <- ggplot(data = rotation_matrix,
+                   mapping = aes(x = PC1, 
+                                 y = PC2)) +
   geom_segment(xend = 0, 
                yend = 0, 
                arrow = arrow_style) +
@@ -137,7 +139,7 @@ ggsave("./results/PCA_dx_full.png")
 
 ##We try to remove arml, leg, wt and ht (wt and ht are directly correlated with bmi)
 #Clean dataset for pca
-pca_prep_data = select_data_subset(
+pca_prep_data <- select_data_subset(
   data, 
   c("seqn", 
     "dx",
@@ -149,20 +151,20 @@ pca_prep_data = select_data_subset(
     "ht"))
 
 #Count number of variables that PCA is based on
-vars = pca_prep_data %>% ncol
+vars <- pca_prep_data %>% ncol
 
 #perform PCA on standardized variables
 pca_ <- pca_prep_data %>% 
   prcomp(scale = TRUE) # do PCA on scaled data
 
 #Load in original dataset to principal components
-data_merge_pca = pca_ %>% 
+data_merge_pca <- pca_ %>% 
   augment(data)
 
 
 #Show distribution of explained variance by PCs using Skree plot
 #Extract using tidy() from broom
-pca_matrix_eigen = pca_ %>%
+pca_matrix_eigen <- pca_ %>%
   tidy(matrix = "eigenvalues")
 
 ggplot(data = pca_matrix_eigen,
@@ -183,27 +185,29 @@ ggplot(data = pca_matrix_eigen,
 ggsave("./results/scree_dx_filtered.png")
 
 #Extract variance explained by PC1 and PC2
-PC1_label = label_PCs(pca_eigen_matrix = pca_eigen_matrix, 
-                      PC_number = 1)
-PC2_label = label_PCs(pca_eigen_matrix = pca_eigen_matrix, 
-                      PC_number = 2)
+PC1_label <- label_PCs(pca_eigen_matrix = pca_eigen_matrix, 
+                       PC_number = 1)
+PC2_label <- label_PCs(pca_eigen_matrix = pca_eigen_matrix, 
+                       PC_number = 2)
 
 # Plot visualization in the PC1,PC2-plane
 # Color coordinates based on Treatment Status
-pca_plot = ggplot(data = data_merge_pca,
-                  mapping = aes(x = .fittedPC1, 
-                                y = .fittedPC2, 
-                                color = `Treatment status`)) + 
+pca_plot <- ggplot(data = data_merge_pca,
+                   mapping = aes(x = .fittedPC1, 
+                                 y = .fittedPC2, 
+                                 color = `Treatment status`)) + 
   geom_point(size = 1.5, 
              alpha = 0.8) +
   labs(x = PC1_label,
        y = PC2_label,
        title = "Visualization of data in Principal Component coordinates",
-       subtitle = "Colored based on Treatment status"
+       subtitle = "Colored based on diagnosis and treatment status",
+       color = ""
   ) + 
-  theme(legend.position = "right",
+  theme(legend.position = "bottom",
         text = element_text(size = 11,
-                            family = "Avenir"))
+                            family = "Avenir")) +
+  guides(color = guide_legend(nrow = 2, byrow = TRUE))
 
 
 #Plot rotation matrix
@@ -224,9 +228,9 @@ arrow_style <- arrow(angle = 20,
                      type = "closed", 
                      length = grid::unit(8, "pt"))
 
-rot_plot = ggplot(data = rotation_matrix,
-                  mapping = aes(x = PC1, 
-                                y = PC2)) +
+rot_plot <- ggplot(data = rotation_matrix,
+                   mapping = aes(x = PC1, 
+                                 y = PC2)) +
   geom_segment(xend = 0, 
                yend = 0, 
                arrow = arrow_style) +
@@ -255,7 +259,7 @@ ggsave("./results/PCA_dx_filtered.png")
 ###Do PCA to predict/cluster BMI category
 
 #Clean dataset for pca
-pca_prep_data = select_data_subset(
+pca_prep_data <- select_data_subset(
   data, 
   c("seqn", 
     "bmi", 
@@ -264,20 +268,20 @@ pca_prep_data = select_data_subset(
     "wt"))
 
 #Count number of variables that PCA is based on
-vars = pca_prep_data %>% ncol
+vars <- pca_prep_data %>% ncol
 
 #perform PCA on standardized variables
 pca_ <- pca_prep_data %>% 
   prcomp(scale = TRUE) # do PCA on scaled data
 
 #Load in original dataset to principal components
-data_merge_pca = pca_ %>% 
+data_merge_pca <- pca_ %>% 
   augment(data)
 
 
 #Show distribution of explained variance by PCs using Skree plot
 #Extract using tidy() from broom
-pca_matrix_eigen = pca_ %>%
+pca_matrix_eigen <- pca_ %>%
   tidy(matrix = "eigenvalues")
 
 ggplot(data = pca_matrix_eigen,
@@ -298,28 +302,29 @@ ggplot(data = pca_matrix_eigen,
 ggsave("./results/scree_bmi.png")
 
 #Extract variance explained by PC1 and PC2
-PC1_label = label_PCs(pca_eigen_matrix = pca_eigen_matrix, 
-                      PC_number = 1)
-PC2_label = label_PCs(pca_eigen_matrix = pca_eigen_matrix, 
-                      PC_number = 2)
+PC1_label <- label_PCs(pca_eigen_matrix = pca_eigen_matrix, 
+                       PC_number = 1)
+PC2_label <- label_PCs(pca_eigen_matrix = pca_eigen_matrix, 
+                       PC_number = 2)
 
 # Plot visualization in the PC1,PC2-plane
 # Color coordinates based on Treatment Status
-pca_plot = ggplot(data = data_merge_pca,
-                  mapping = aes(x = .fittedPC1, 
-                                y = .fittedPC2, 
-                                color = `BMI class`)) + 
+pca_plot <- ggplot(data = data_merge_pca,
+                   mapping = aes(x = .fittedPC1, 
+                                 y = .fittedPC2, 
+                                 color = `BMI class`)) + 
   geom_point(size = 1.5, 
              alpha = 0.8, 
              shape = 17) +
   labs(x = PC1_label,
        y = PC2_label,
        title = "Visualization of data in Principal Component coordinates",
-       subtitle = "Colored based on BMI class"
-  ) + 
-  theme(legend.position = "right",
+       subtitle = "Colored based on BMI class",
+       color = "") + 
+  theme(legend.position = "bottom",
         text = element_text(size = 11,
-                            family = "Avenir")) 
+                            family = "Avenir")) +
+  guides(color = guide_legend(nrow = 2, byrow = TRUE))
 
 #Plot rotation matrix
 
@@ -340,9 +345,9 @@ arrow_style <- arrow(angle = 20,
 rot_label_axes <- rot_plot_axes(rotation_matrix)
 
 
-rot_plot = ggplot(data = rotation_matrix,
-                  mapping = aes(x = PC1, 
-                                y = PC2)) +
+rot_plot <- ggplot(data = rotation_matrix,
+                   mapping = aes(x = PC1, 
+                                 y = PC2)) +
   geom_segment(xend = 0, 
                yend = 0, 
                arrow = arrow_style) +
@@ -365,3 +370,4 @@ rot_plot = ggplot(data = rotation_matrix,
   caption = "Inspiration from: https://clauswilke.com/blog/2020/09/07/pca-tidyverse-style/")
 
 ggsave("./results/PCA_bmi.png")
+

@@ -23,8 +23,8 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Introduction
 - Diabetes is a prevalent disease worldwide 
-- Huge amount of data available regarding diabetes
-- Motivation: Use data to help understand which factors contribute to developing the disease
+- Lots of diabetes-related data is available
+- Motivation: Use data to help understand which factors contribute to being diagnosed
 
 <!-- Line -->
 
@@ -105,7 +105,7 @@ variables_described %>%
                 font_size = 10) %>% 
   row_spec(row =1, background = 'pink')
 ```
-<font size="4">Here we assigned the mean from all non-NA values of income.</font>
+<font size="4">Here we assigned the mean from all non-NA values of income</font>
 
 
 ```{r}
@@ -118,7 +118,7 @@ variables_described %>%
   row_spec(row = 1:6, background = 'lightgreen')
 ```
 
-<font size="4">Here we implemented KNN (K=5) in tidyverse. We did not optimize K.</font>
+<font size="4">Here we implemented KNN (K=5) in tidyverse. We did not optimize K</font>
 
 <!-- Casper -->
 
@@ -153,7 +153,7 @@ variables_described %>%
 
 <br>
 <br>
-<font size="4">Positive correlations primarily betweeen body-size related variables.</font>
+<font size="4">Positive correlations primarily betweeen body-size related variables</font>
 
 
 
@@ -190,8 +190,8 @@ variables_described %>%
 
 ![](../results/Age_ethnicity_tx.png){width=100%, height=70%}
 
-- <font size="4">Older individuals tend to receive treatment to a larger extent compared to younger individuals.</font>
-- <font size="4">No correlation between treatment status and ethnicity.</font>
+- <font size="4">Older individuals tend to receive treatment to a larger extent compared to younger individuals</font>
+- <font size="4">No correlation between treatment status and ethnicity</font>
 
 <!-- Tram -->
 
@@ -201,12 +201,12 @@ variables_described %>%
 <font size="4">Serum albumin levels in relation to diagnosis</font>
 
 ![](../results/Albumin_dx.png){width=100%, height=70%}
-<font size="4">Serum albumin is lower in diagnosed compared to non-diagnosed individuals.</font>
+<font size="4">Serum albumin is lower in diagnosed compared to non-diagnosed individuals</font>
 
 <!-- Line -->
 
 ## Principal Component Analysis
-<font size="4">Investigation of patterns concerning diagnosis of diabetes mellitus</font>
+<font size="4">Investigation of patterns concerning diagnosis and treatment of diabetes mellitus</font>
 
 ![](../results/PCA_dx_filtered.png){width=100%}
 
@@ -214,13 +214,6 @@ variables_described %>%
 
 <!-- Line -->
 
-## K-means clustering 
-
-<font size="4">Identify relevant number of clusters</font>
-
-![](../results/number_of_clusters_KMC.png){width=95%}
-
-<!-- Melanie -->
 
 ## K-means clustering
 
