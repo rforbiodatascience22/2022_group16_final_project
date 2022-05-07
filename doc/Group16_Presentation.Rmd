@@ -100,21 +100,6 @@ DX does not differentiate between type I and type II
 
 <!-- Casper -->
 
-## Variables containing NAs
-
-```{r}
-variables_described %>% 
-  kable() %>%
-  kable_styling(bootstrap_options = c("striped", 
-                                      "condensed"), 
-                font_size = 10) %>% 
-  row_spec(row =5, background = 'pink') %>% 
-  row_spec(row = 11:16, background = 'lightgreen')
-  
-```
-
-<!-- Casper -->
-
 # Methods
 
 ## Data journey
