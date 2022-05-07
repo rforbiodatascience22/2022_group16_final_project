@@ -4,6 +4,7 @@ library("broom")
 library("dplyr")
 library("purrr")
 library("ggplot2")
+library("stringr")
 
 # Define functions --------------------------------------------------------
 source(file = "R/99_project_functions.R")
@@ -74,7 +75,11 @@ ggplot(data = clusterings,
   geom_line() +
   geom_point() +
   scale_x_continuous(breaks = seq(1,9,1)) +
-  labs(x = "Number of clusters (k)")
+  labs(x = "Number of clusters (k)",
+       y = "Variance within the clusters")
+
+ggsave("./results/number_of_clusters_KMC.png")
+
 
 # 3 clusters seem sufficient
 
@@ -95,6 +100,8 @@ augmented = augment(x = kclust,
 
 # Plotting all against all clustering 
 KMC_plot("age") # No clusters
+ggsave("./results/age_against_all_KMC.png")
+
 KMC_plot("income")
 KMC_plot("wt")    
 KMC_plot("ht")    

@@ -59,7 +59,7 @@ diag_above50 <- dx_above50 %>%
 (diag_below50 + diag_above50) + 
   plot_annotation(title = "Prevalence of diabetes mellitus",
                   subtitle = "Divided on age and gender")
-
+ggsave("./results/Dx_age50.png")
 
 
 
@@ -80,6 +80,7 @@ dx_total %>%
        y = "Annual income [USD]", 
        title = "Annual income and ethnicity in relation to treatment status",
        subtitle = "In diagnosed individuals")
+ggsave("./results/tx_Ethnicity_income.png")
 
 
 
@@ -93,6 +94,7 @@ ggplot(data = dx_total,
        subtitle = "Based on treatment status",
        y = "Count of individuals") +
   theme(legend.position = "none")
+ggsave("./results/tx.png")
 
 
 
@@ -128,6 +130,7 @@ ggplot(data = dx_group_income,
   labs(title = "Distribution of people diagnosed with Diabetes Mellitus",
        x = "Age",
        y = "Income group") 
+ggsave("./results/Age_income_dx.png")
 
 
 
@@ -148,6 +151,7 @@ ggplot(data = dx_group_income,
   labs(title = "Distribution of people diagnosed with Diabetes Mellitus",
        x = "Age",
        y = "Ethnicity") 
+ggsave("./results/Age_ethnicity_tx.png")
 
 
 
@@ -173,6 +177,7 @@ ggplot(data = data,
   labs(y = "Fraction",
        title = "Distribution of diagnose status",
        subtitle = "Based on BMI class")
+ggsave("./results/BMI_dx.png")
 
 
 
@@ -189,6 +194,7 @@ ggplot(data = data,
        subtitle = "Divided into gender",
        x = "Gender",
        y = "Number of individuals")
+ggsave("./results/Gender_dx.png")
 
 #Due to the relation between diagnosis, gender and albumin levels (see below),
 #we test boxplots over BMI distributions for genders
@@ -200,7 +206,10 @@ data %>%
                        fill = `BMI class`)) +
   geom_bar(position = "dodge") +
   labs(x = "Gender",
-       y = "Count of people")
+       y = "Count of people", 
+       title = "Distribution of BMI class", 
+       subtitle = "Divided by gender")
+ggsave("./results/BMI_gender.png")
 
 
 
@@ -225,6 +234,7 @@ ggplot(data = data_albumin_vis,
   geom_boxplot() +
   labs(title = "Distributions of Albumin levels based on BMI class",
        x = "Albumin (g/dL)")
+ggsave("./results/Albumin_BMI.png")
 
 
 #Density plot of albumin based on diagnosis
@@ -251,6 +261,7 @@ ggplot(data = data_albumin_vis,
                          select(p.value))) +
   theme(legend.position = "bottom",
         legend.title = element_blank())
+ggsave("./results/Albumin_dx.png")
 
 
 
@@ -266,3 +277,4 @@ ggplot(data = data_albumin_vis,
        subtitle = "Divided by gender") +
   theme(legend.position = "bottom",
         legend.title = element_blank())
+ggsave("./results/Albumin_gender.png")

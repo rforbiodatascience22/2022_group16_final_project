@@ -1,67 +1,263 @@
 ---
-title: "Awsome titlte" 
+title: "NHANES Diabetes Data Analysis" 
 #"Exploring the influence of <br> personal measures in relation to diabetes #mellitus diagnosing "
-subtitle: "Group 16"
+subtitle: "22100 R for Bio Data Science"
 author: 
- - "Casper Rasmussen"
- - "Line Sandvad Nielsen"
- - "Tram Nguyen"
- - "Varun Shankar"
- - "Melanie Randahl Nielsen"
+ - name: "Group 16:"
+ - name: "Casper Rasmussen"
+ - name: "Line Sandvad Nielsen"
+ - name: "Tram Nguyen"
+ - name: "Varun Shankar"
+ - name: "Melanie Randahl Nielsen"
 date: "`r Sys.Date()`"
 output: ioslides_presentation
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, message=FALSE}
+library(knitr)
+library(flextable)
+library(kableExtra)
+library('tidyverse')
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ## Introduction
 
-We became interested in this dataset due to wide spectrum of variables, going from income to Albumin and
-Blood urea nitrogen measurements. The data contains some missing values which we have to handle as well. <br>
-We would like to look into correlations in the data first of all, such as if income and gender seem to influence
-whether a person is diagnosed with diabetes mellitus (DM) or not. This could also be done by training a
-logistic regression classifier, however we are not sure yet to go down this path.
-We also find the opportunity to do a Principal Component Analysis exciting, in order to explore whether
-the variables in the dataset gives a clear clustering pattern to whether people are diagnosed with diabetes
-mellitus or not.
+Learning to use tidyverse for data exploration and modelling and bla bla
 
-
-## Material and Methods
-Make a flow chart of the process. 
-(can be done in powerpoint)
-(create “images” folder in the “doc” folder)
-
-- Bullet 1
-- Bullet 2
-- Bullet 3
+# Materials
 
 ## NHANES glycohemoglobin data
-Short description of the data
+
+<font size="4">National Health and Nutrition Examination Survey data concerning glycohemoglobin levels and diabetes mellitus (DM) from https://hbiostat.org/data/.</font>
+
+<font size="4">**Why this dataset?**</font>
+
+- <font size="3">Managable size: 20 variables, 6795 observations</font>
+- <font size="3">Wide spectrum of variables</font>
+- <font size="3">Contains missing values to handle</font>
+- <font size="3">Explore correlations between diagnosis with DM and the other variables</font>
 
 
-## Methods
+## The data
 
--  Explorative data analysis
-- Principle component analysis (PCA)
-- K-means clustering
-- Logistic regression model
+```{r echo=FALSE, message=FALSE}
+my_data_raw <- read_tsv(file = "../data/_raw/nhgh.tsv")
+variables_described <- colnames(my_data_raw) %>% 
+  tibble %>% 
+  rename(Variable = ".") %>% 
+  mutate(Description = c("Unique patient ID", "Gender", "Age", "Race/ethnicity", "Family income level",
+                        "On Insulin or Diabetes meds", "Diagnosed with DM or pre-DM",
+                        "Weight", "Height", "Body-mass index", "Upper leg length", 
+                        "Upper arm length", "Arm circumference", "Waist circumference",
+                        "Triceps skinfold thickness", "Subscapular skinfold thickness",
+                        "Glycohemoglobin", "Albumin", "Blood urea nitrogen", "Serum Creatinine"
+                        ),
+         Units = c("", "", "Years", "", "$",
+                   "", "", 
+                   "kg", "cm", "kg/m^2", "cm",
+                   "cm", "cm", "cm",
+                   "mm", "mm",
+                   "%", "g/dL", "mg/dL", "mg/dL"),
+         Levels = c("", "0, 1", "12 - 80", "5 levels: White, Black, Mexican, Other Hispanic, Other", "14 levels from 0 - 100000",
+                  "0, 1", "0, 1", 
+                  "28 - 239.4", "123.3 - 202.7", "13.18 - 84.87", "20.4 - 50.6",
+                  "24.8 - 47", "16.8 - 61", "52 - 179", 
+                  "2.6 - 41.1", "3.8 - 40.4", 
+                  "4 - 16.4", "2.5 - 5.3", "1 - 90", "0.14 - 15.66"))
+```
 
-## Results and discussion 
+
+
+```{r}
+variables_described %>% 
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", 
+                                      "condensed"), 
+                font_size = 10)
+```
+
+## Variable types
+
+```{r}
+variables_described %>% 
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", 
+                                      "condensed"), 
+                font_size = 10) %>% 
+  row_spec(row = 6:7, background = 'lightgreen') %>% 
+  row_spec(row = 8:16, background = 'lightblue') %>% 
+  row_spec(row = 17:20, background = 'pink')
+  
+```
+DX does not differentiate between type I and type II
+
+## Variables containing NAs
+
+```{r}
+variables_described %>% 
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", 
+                                      "condensed"), 
+                font_size = 10) %>% 
+  row_spec(row =5, background = 'pink') %>% 
+  row_spec(row = 11:16, background = 'lightgreen')
+  
+```
+
+# Methods
+
+## Data journey
+![](../doc/Images/flowchart.png){width=100%}
+
+## Data cleaning - Imputation of NAs
+
+```{r}
+variables_described %>% 
+  filter(Variable == "income") %>% 
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", 
+                                      "condensed"), 
+                font_size = 10) %>% 
+  row_spec(row =1, background = 'pink')
+```
+Here we assigned the mean from all non-NA values of income.
+
+
+```{r}
+variables_described %>% 
+  slice(11:16) %>% 
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", 
+                                      "condensed"), 
+                font_size = 10) %>% 
+  row_spec(row = 1:6, background = 'lightgreen')
+```
+
+Here we implemented KNN (K=5) in tidyverse. We did not optimize K.
+
+## Data cleaning - Removal of outliers
+
+![](../results/outliers.png){width=100%}
+
+Biochemical variables have more outliers
+
+```{r}
+variables_described %>% 
+  slice(20) %>% 
+  kable() %>%
+  kable_styling(bootstrap_options = c("striped", 
+                                      "condensed"), 
+                font_size = 10)
+```
+
+Normal range is 0.6 - 1.2 mg/dL, 5+ indicates severe kidney impairment. We removed all values above 5 (17 total values).
+<font size="2">Source: https://www.medicinenet.com/creatinine_blood_test/article.htm</font>
+
+
+# Results & Discussion
+
+## Explorative data analysis
+
+Linear correlation between numeric variables 
+<div class = "columns-2">
+
+![](../results/corrplot.png){width=100%, height=100%}
+
+<br>
+<br>
+Positive correlations primarily betweeen body-size related variables.   
+
+
+
+</div>
+
+## Explorative data analysis
+
+Diagnosis status across BMI class 
+
+
+![](../results/BMI_dx.png){width=100%}
+
+- Excess weight and increasing obesity levels seem to be a contributing factor to the development of diabetes. 
+
+
+## Explorative data analysis
+
+Age as a contributing factor to diagnosis across BMI class 
+
+
+![](../results/BMIclass_age_dx.png){width=100%, height=80%}
+
+- Older individuals tend to be diagnosed to a greater extent compared to younger individuals. 
+- Increasing obesity levels seem to negatively influence the age of diagnosis. 
+
+
+## Explorative data analysis
+
+Treatment status of different ethnicity and age 
+
+
+![](../results/Age_ethnicity_tx.png){width=100%, height=70%}
+
+- Older individuals tend to receive treatment to a larger extent compared to younger individuals. 
+- No correlation between treatment status and ethnicity.
+
+## Explorative data analysis
+
+Influence of income and ethnicity on treatment status 
+
+
+![](../results/tx_Ethnicity_income.png){width=100%, height=70%}
+
+Annual income levels and ethinicity do not seem to influence treatment status. 
+
+
+## Explorative data analysis
+
+Serum albumin levels in relation to diagnosis 
+
+![](../results/Albumin_dx.png){width=100%, height=70%}
+Serum albumin is lower in diagnosed compared to non-diagnosed individuals. 
+
+
+## Principal Component Analysis
+Investigation of patterns concerning diagnosis of diabetes mellitus
+
+![](../results/PCA_dx_filtered.png){width=100%}
+
+Variables dx, tx, leg, arml, wt and ht were excluded
+
+
+## Principal Component Analysis
+
+Investigation of patterns in relation to BMI
+
+![](../results/PCA_bmi.png){width=100%}
+
+
+Variables bmi, wt and ht were excluded
+
+## K-means clustering 
+
+Identify relevant number of clusters
+
+![](../results/number_of_clusters_KMC.png){width=100%}
+
+
+## K-means clustering
+
+Clusters between age and all other variables
+
+![](../results/age_against_all_KMC.png){width=100%}
 
 ## Conclusion 
 
+Diagnosis of DM correlates with age, blood glucose, bmi, .... 
+Income and race does not appear to predict DM diagnosis or treatment status
+Blood glucose overrules other variables in predicting DM diagnosis
+Cannot cluster patients based on these variables alone
 
-## Slide with R Output
-
-```{r cars, echo = TRUE}
-summary(cars)
-```
-
-## Slide with Plot
-
-```{r pressure}
-plot(pressure)
-```
+Further research:
+Appears that older people who have diabetes tend to be treated more often than younger people with diabetes
 
