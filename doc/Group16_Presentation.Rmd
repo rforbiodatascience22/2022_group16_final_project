@@ -1,13 +1,14 @@
 ---
-title: "Awsome titlte" 
+title: "NHANES Diabetes Data Analysis" 
 #"Exploring the influence of <br> personal measures in relation to diabetes #mellitus diagnosing "
-subtitle: "Group 16"
+subtitle: "22100 R for Bio Data Science"
 author: 
- - "Casper Rasmussen"
- - "Line Sandvad Nielsen"
- - "Tram Nguyen"
- - "Varun Shankar"
- - "Melanie Randahl Nielsen"
+ - name: "Group 16:"
+ - name: "Casper Rasmussen"
+ - name: "Line Sandvad Nielsen"
+ - name: "Tram Nguyen"
+ - name: "Varun Shankar"
+ - name: "Melanie Randahl Nielsen"
 date: "`r Sys.Date()`"
 output: ioslides_presentation
 ---
@@ -150,12 +151,74 @@ variables_described %>%
                 font_size = 10)
 ```
 
-Normal range is 0.6 - 1.3 mg/dL, 5+ indicates severe kidney impairment. We removed all values above 5 (17 total values).
+Normal range is 0.6 - 1.2 mg/dL, 5+ indicates severe kidney impairment. We removed all values above 5 (17 total values).
+<font size="2">Source: https://www.medicinenet.com/creatinine_blood_test/article.htm</font>
 
 
 # Results & Discussion
 
-## DATA VISUALIZATION
+## Explorative data analysis
+
+Linear correlation between numeric variables 
+<div class = "columns-2">
+
+![](../results/corrplot.png){width=100%, height=100%}
+
+<br>
+<br>
+Positive correlations primarily betweeen body-size related variables.   
+
+
+
+</div>
+
+## Explorative data analysis
+
+Diagnosis status across BMI class 
+
+
+![](../results/BMI_dx.png){width=100%}
+
+- Excess weight and increasing obesity levels seem to be a contributing factor to the development of diabetes. 
+
+
+## Explorative data analysis
+
+Age as a contributing factor to diagnosis across BMI class 
+
+
+![](../results/BMIclass_age_dx.png){width=100%, height=80%}
+
+- Older individuals tend to be diagnosed to a greater extent compared to younger individuals. 
+- Increasing obesity levels seem to negatively influence the age of diagnosis. 
+
+
+## Explorative data analysis
+
+Treatment status of different ethnicity and age 
+
+
+![](../results/Age_ethnicity_tx.png){width=100%, height=70%}
+
+- Older individuals tend to receive treatment to a larger extent compared to younger individuals. 
+- No correlation between treatment status and ethnicity.
+
+## Explorative data analysis
+
+Influence of income and ethnicity on treatment status 
+
+
+![](../results/tx_Ethnicity_income.png){width=100%, height=70%}
+
+Annual income levels and ethinicity do not seem to influence treatment status. 
+
+
+## Explorative data analysis
+
+Serum albumin levels in relation to diagnosis 
+
+![](../results/Albumin_dx.png){width=100%, height=70%}
+Serum albumin is lower in diagnosed compared to non-diagnosed individuals. 
 
 
 ## Principal Component Analysis
@@ -168,7 +231,7 @@ Variables dx, tx, leg, arml, wt and ht were excluded
 
 ## Principal Component Analysis
 
-### Investigation of patterns in relation to BMI
+Investigation of patterns in relation to BMI
 
 ![](../results/PCA_bmi.png){width=100%}
 
@@ -176,16 +239,25 @@ Variables dx, tx, leg, arml, wt and ht were excluded
 Variables bmi, wt and ht were excluded
 
 ## K-means clustering 
-### Identify relevant number of clusters
+
+Identify relevant number of clusters
+
 ![](../results/number_of_clusters_KMC.png){width=100%}
 
 
 ## K-means clustering
-### CLusters between age and all other variables
+
+Clusters between age and all other variables
+
 ![](../results/age_against_all_KMC.png){width=100%}
 
 ## Conclusion 
 
+Diagnosis of DM correlates with age, blood glucose, bmi, .... 
+Income and race does not appear to predict DM diagnosis or treatment status
+Blood glucose overrules other variables in predicting DM diagnosis
+Cannot cluster patients based on these variables alone
 
-
+Further research:
+Appears that older people who have diabetes tend to be treated more often than younger people with diabetes
 
