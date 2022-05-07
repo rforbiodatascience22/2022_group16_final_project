@@ -24,6 +24,9 @@ kmeans_data <- kmeans_data %>%
 
 
 # Model data-----------------------------------------------------
+# Set seed to reproduce output
+set.seed(10)
+
 
 # Identify relevant number of clusters
 res_kmeans <- kmeans(kmeans_data, 10)
@@ -89,17 +92,17 @@ ggsave("./results/number_of_clusters_KMC.png")
 
 # Make 3 clusters
 
-kclust = kmeans(x = kmeans_data, 
-                centers = 3)
+kclust <- kmeans(x = kmeans_data, 
+                 centers = 3)
 
-augmented = augment(x = kclust, 
-                    kmeans_data) #Model object and dataset, assign the cluster to each obs in the original df
+augmented <- augment(x = kclust, 
+                     kmeans_data) #Model object and dataset, assign the cluster to each obs in the original df
 
 
 # Visualize data -----------------------------------------
 
 # Plotting all against all clustering 
-KMC_plot("age") # No clusters
+KMC_plot("age") 
 ggsave("./results/age_against_all_KMC.png")
 
 KMC_plot("income")

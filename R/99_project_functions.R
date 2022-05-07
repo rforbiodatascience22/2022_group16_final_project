@@ -79,7 +79,8 @@ KMC_plot <- function(y_variable) {
     theme(axis.text.x = element_text(size = 8),
           legend.position="bottom") +
     labs(x = "Value",
-         y = str_to_title(y_variable))
+         y = str_to_title(y_variable),
+         color = "Cluster")
     
   p1
   return(p1)
