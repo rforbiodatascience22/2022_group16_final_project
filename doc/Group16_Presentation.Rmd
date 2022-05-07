@@ -269,17 +269,16 @@ Clusters between age and all other variables
 
 <font size="3"> Performing single parameter evaluation to have a baseline</font>
 
-fig.allign = "center"
 
+![](../results/Single_Prediction.png){width=100%}
 
-![](../results/Single_Prediction.png){width=60%, height=25.5%}
 <font size = "2"> The precision of the BMI & GH is 29% and 68% respectively</font>
 
 <!-- Varun -->
 
 ## Parameter Impact Estimation
 
-![](../results/Impact_Estimation_with_confidence_interval.png){width=90%}
+![](../results/Impact_Estimation_with_confidence_interval.png){width=100%}
 
 <!-- Varun -->
 
@@ -293,7 +292,7 @@ fig.allign = "center"
 
 ![](../results/Prediction_on_colinearity_check.png){width=100%}
 
-<font size = "2"> The precision of this model is at 80%!!</font>
+<font size = "2"> The precision of this model is at 80%</font>
 
 <!-- Varun -->
 
