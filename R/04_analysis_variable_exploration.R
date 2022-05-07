@@ -29,9 +29,11 @@ data %>%
   ggplot(mapping = aes(x = ID, 
                        y = value)) +
   geom_boxplot() +
-  labs(x = "Variable",
-       y = "Normalized value")
-  
+  labs(x = "Variables",
+       y = "Normalized value", 
+       title = "Outliers for each variable") + 
+  theme(axis.text.x = element_text(angle = 20))
+ggsave("./results/outliers.png")
 
 
 # Load data ---------------------------------------------------------------
@@ -52,12 +54,16 @@ corr_matrix <- data %>%
   cor(method = "pearson",
       use = "complete.obs")
 
+
+png("./results/corrplot.png")
 corrplot(corr_matrix, 
          type = "upper", 
          order = "hclust", 
          tl.col = "black",
          tl.srt = 45,      
          tl.cex = 1)
+dev.off()
+
 
 
 ##Violin plot (and boxplots) of income, sorted on ethnicity 
@@ -77,6 +83,7 @@ data %>%
        title = "Annual income by ethnicity", 
        caption = "Red dot = outlier", 
        size = 2)
+ggsave("./results/income_ethnicity.png")
 
 
 #Distribution of individuals' BMI in the dataset 
@@ -96,10 +103,11 @@ bmi_cols <- data %>%
                        y = Percentage,
                        fill = `BMI class`)) +
   geom_col() + 
-  labs(x = "BMI class", 
-       title = "Distribution of BMI classes") +
+  labs(x = " ", 
+       subtitle = "Distribution of BMI classes") +
   theme(axis.text.x = element_text(angle = 15),
         legend.position = "none")
+
 
 
 #Boxplots showing BMI class vs. age, stratified on diagnose status
@@ -123,11 +131,14 @@ bmi_boxplots <- data %>%
   scale_fill_discrete(name = " ") + 
   labs( x = "BMI class", 
         y = "Age",
-       title = "BMI class and age in relation to diagnosis")
+       subtitle = "BMI class and age in relation to diagnosis")
 
 #Use patchwork to combine the two plots
-(bmi_cols / bmi_boxplots) + plot_annotation(
-  caption = "BMI classes classified are as defined in the exercise of week 4.")
+(bmi_cols / bmi_boxplots) + 
+  plot_annotation( caption = "BMI classes classified as defined in the exercise of week 4.") + 
+  plot_layout(heights = unit(c(2, 4), 
+                             c('cm', 'cm')))
+ggsave("./results/BMIclass_age_dx.png")
 
 
 
@@ -148,4 +159,5 @@ data %>%
        y = "Density",
        title = "Gender-based distribution of body fat percentage",
        subtitle = "Divided based on ethnicity")
+ggsave("./results/bfp_ethnicity.png")
 
